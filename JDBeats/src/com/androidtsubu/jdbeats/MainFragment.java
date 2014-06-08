@@ -20,7 +20,7 @@ public class MainFragment extends Fragment {
                     MainActivity activity = (MainActivity) getActivity();  
                     activity.onTweetClicked();
                 } catch (ClassCastException e) {  
-                    throw new ClassCastException("activity ‚ª onTweetBtnClickListener ‚ğÀ‘•‚µ‚Ä‚¢‚Ü‚¹‚ñ.");  
+                    throw new ClassCastException("activityãŒonTweetBtnClickListenerã‚’å®Ÿè£…ã—ã¦ã„ã¾ã›ã‚“ã€‚");  
                 }  
             }  
         });  
