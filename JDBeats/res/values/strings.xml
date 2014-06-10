@@ -4,5 +4,9 @@
     <string name="app_name">JDBeats</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="twitter_consumer_key">XstXUMNnzhyeVOmd6GGjw</string>
+    <string name="twitter_consumer_secret">yNsZx6d1L9q6N8pRCjWpv5N3blWSNTCWnGMwyLYCmw</string>
+    <string name="twitter_oauth">ついったにんしょう</string>
+    <string name="twitter_callback_url">miguse://twitter</string>
 
 </resources>
