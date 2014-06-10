@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
 
 	public void onTweetClicked() {
 		// TODO Auto-generated method stub
-		 Toast.makeText(this, "‚Í‚Ÿ‚Í‚Ÿ", Toast.LENGTH_LONG).show();
+		 Toast.makeText(this, "ã¯ãã¯ã", Toast.LENGTH_LONG).show();
 	}
 
 }
