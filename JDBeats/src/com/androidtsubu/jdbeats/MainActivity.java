@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private Twitter mTwitter;
-	private EditText mInputText;
+	private String sTweet;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,7 @@ public class MainActivity extends Activity {
 		}
 		
 		mTwitter = TwitterUtils.getTwitterInstance(this);
-
-        mInputText = (EditText) findViewById(R.id.editText1);
+		sTweet = "#jdbeats";
         
 		findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,14 +100,13 @@ public class MainActivity extends Activity {
             @Override
             protected void onPostExecute(Boolean result) {
                 if (result) {
-                	mInputText.getText().clear();
                     showToast("ついーとＯＫ");
                 } else {
                     showToast("ついーとＮＧ");
                 }
             }
         };
-        task.execute(mInputText.getText().toString());
+        task.execute(sTweet);
     }
 
     private void showToast(String text) {
