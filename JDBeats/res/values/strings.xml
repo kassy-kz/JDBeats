@@ -8,5 +8,6 @@
     <string name="twitter_tweet">ついーと</string>
     <string name="twitter_oauth">ついったにんしょう</string>
     <string name="twitter_callback_url">miguse://twitter</string>
-
+    <string name="strScouterActivityName">Scouter</string>
+    
 </resources>

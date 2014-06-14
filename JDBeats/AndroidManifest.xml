@@ -42,6 +42,18 @@
                     android:scheme="miguse" />
             </intent-filter>
         </activity>
-    </application>
+        
+        <activity
+            android:name=".ScouterActivity"
+            android:label="@string/strScouterActivityName" >
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+        </activity>
+</application>
 
 </manifest>
