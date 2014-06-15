@@ -6,12 +6,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.androidtsubu.jdbeats.db.JDBeatsDBHelper;
+import com.androidtsubu.jdbeats.db.JDBeatsDBManager;
+import com.androidtsubu.jdbeats.db.JDBeatsEntity;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Loader;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -74,23 +82,21 @@ public class ChartFragment extends Fragment {
 	 */
 	public static class ChartLoader extends AsyncTaskLoader<Drawable> {
 		
+		private Context context;
+		
 		/**
 		 * コンストラクタ
 		 * @param context
 		 */
 		public ChartLoader(Context context) {
 			super(context);
+			this.context = context;
 		}
 
-		/**
-		 * Google chart APIでグラフを作成し、バックグラウンドで読み込む
-		 * @return 作成されたグラフ。取得に失敗した場合はnull
-		 */
-		@Override
-		public Drawable loadInBackground() {
+		private Drawable downloadGraph(List<JDBeatsEntity> lstEntity) {
 			Drawable drawable = null;
 			try {
-				String uri = createURI();
+				String uri = createURI(lstEntity);
 				InputStream is = (InputStream) new URL(uri).getContent();
 				drawable = Drawable.createFromStream(is, "");
 				is.close();
@@ -103,19 +109,77 @@ public class ChartFragment extends Fragment {
 				return null;
 			}
 		}
+		
+		/**
+		 * グラフ描画に必要なデータをDBから取得する
+		 * @return
+		 */
+		private List<JDBeatsEntity> queryDB() {
+			String[] columns = {JDBeatsDBManager.Columns.KEY_ID, JDBeatsDBManager.Columns.KEY_VALUE1};
+			final String orderby = JDBeatsDBManager.Columns.KEY_ID + " DESC";
+			final String limit = "LIMIT 30";
+
+			JDBeatsDBHelper helper = new JDBeatsDBHelper(context);
+			SQLiteDatabase db = helper.getWritableDatabase();
+			
+			Cursor cursor = db.query(
+					JDBeatsDBManager.DATABASE_TABLE,
+					columns,
+					null,
+					null,
+					null,
+					null,
+					orderby,
+					limit);
+			if (cursor == null || cursor.moveToFirst() == false) {
+				return null;
+			}
+
+			List<JDBeatsEntity> lstEntity = new ArrayList<JDBeatsEntity>();
+			do {
+				JDBeatsEntity entity = new JDBeatsEntity();
+				entity.setId(cursor.getInt(0));
+				entity.setDateTime(cursor.getLong(1));
+				entity.setValue1(cursor.getString(2));
+				lstEntity.add(entity);
+			}while(cursor.moveToNext());
+			
+			return lstEntity;
+		}
+		
+		/**
+		 * Google chart APIでグラフを作成し、バックグラウンドで読み込む
+		 * @return 作成されたグラフ。取得に失敗した場合はnull
+		 */
+		@Override
+		public Drawable loadInBackground() {
+			List<JDBeatsEntity> lstEntity = queryDB();
+			return downloadGraph(lstEntity);
+		}
 
 		/**
 		 * グラフ組み立て
+		 * @param lstEntity DBに登録されたデータ
 		 * @return Google chart URL
 		 * @throws UnsupportedEncodingException
 		 */
-		private String createURI() throws UnsupportedEncodingException {
-			// TODO:デモ用URL。折れ線グラフ等に修正する
-			return "http://chart.apis.google.com/chart?cht=p3&chdlp=b"
-					+ "&chtt=" + URLEncoder.encode("サンプル", "UTF-8")
-					+ "&chd=t:40,5,10,25,20,50"
-					+ "&chdl=Cupcake|Donut|Eclair|Froyo|Gingerbread|Honeycomb"
-					+ "&chs=450x200";
+		private String createURI(List<JDBeatsEntity> lstEntity) throws UnsupportedEncodingException {
+			StringBuilder sb = new StringBuilder(
+					"http://chart.apis.google.com/chart?cht=lc&chdlp=b"
+					+ "&chtt=" + URLEncoder.encode("測定データ", "UTF-8")
+					+ "&chs=450x200"
+					+ "&chd=t:");
+
+			int lstCount = 1;
+			for(JDBeatsEntity entity : lstEntity) {
+				sb.append(entity.getValue1());
+				if (lstCount != lstEntity.size()) {
+					sb.append(",");
+				}
+				lstCount++;
+			}
+			
+			return sb.toString();
 		}
 	}
 }
