@@ -15,8 +15,8 @@ public class JDBeatsDBManager {
 
 	/** テーブル作成 */
 	public static final String CREATE_TABLE =
-			"CREATE TABLE IF NOT EXISTS " + DATABASE_NAME +
-			" (" + Columns.KEY_ID + " INTERGER PRIMARY KEY AUTOINCREMENT," +
+			"CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE +
+			" (" + Columns.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 			Columns.KEY_DATETIME + " LONG," +
 			Columns.KEY_VALUE1 + " TEXT," +
 			Columns.KEY_VALUE2 + " TEXT);";

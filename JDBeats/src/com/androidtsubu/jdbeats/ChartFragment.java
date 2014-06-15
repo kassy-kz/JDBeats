@@ -37,12 +37,16 @@ public class ChartFragment extends Fragment {
 	/** Google chart表示用ImageView */
 	private ImageView mImageView;
 	
+	/** ImageViewのWidth/Height */
+	private int mWidth;
+	private int mHeight;
+	
 	/** Loaderコールバック定義 */
 	private LoaderManager.LoaderCallbacks<Drawable> mCallbacks = new LoaderManager.LoaderCallbacks<Drawable>() {
 
 		@Override
 		public Loader<Drawable> onCreateLoader(int id, Bundle args) {
-			return new ChartLoader(getActivity());
+			return new ChartLoader(getActivity(), args.getInt("width"), args.getInt("height"));
 		}
 
 		@Override
@@ -63,6 +67,9 @@ public class ChartFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_chart, null, false);
 		mImageView = (ImageView) view.findViewById(R.id.chart);
 
+		mWidth = mImageView.getWidth();
+		mHeight = mImageView.getHeight();
+
 		return view;
 	}
 
@@ -72,7 +79,10 @@ public class ChartFragment extends Fragment {
 		
 		// ローダを開始する
 		LoaderManager manager = getLoaderManager();
-		manager.initLoader(0, null, mCallbacks).forceLoad();
+		Bundle bundle = new Bundle();
+		bundle.putInt("width", mWidth);
+		bundle.putInt("height", mHeight);
+		manager.initLoader(0, bundle, mCallbacks).forceLoad();
 	}
 
 	/**
@@ -83,14 +93,18 @@ public class ChartFragment extends Fragment {
 	public static class ChartLoader extends AsyncTaskLoader<Drawable> {
 		
 		private Context context;
-		
+		private int width;
+		private int height;
+
 		/**
 		 * コンストラクタ
 		 * @param context
 		 */
-		public ChartLoader(Context context) {
+		public ChartLoader(Context context, int width, int height) {
 			super(context);
 			this.context = context;
+			this.width = width;
+			this.height = height;
 		}
 
 		private Drawable downloadGraph(List<JDBeatsEntity> lstEntity) {
@@ -117,7 +131,7 @@ public class ChartFragment extends Fragment {
 		private List<JDBeatsEntity> queryDB() {
 			String[] columns = {JDBeatsDBManager.Columns.KEY_ID, JDBeatsDBManager.Columns.KEY_VALUE1};
 			final String orderby = JDBeatsDBManager.Columns.KEY_ID + " DESC";
-			final String limit = "LIMIT 30";
+			final String limit = "30";
 
 			JDBeatsDBHelper helper = new JDBeatsDBHelper(context);
 			SQLiteDatabase db = helper.getWritableDatabase();
@@ -167,18 +181,29 @@ public class ChartFragment extends Fragment {
 			StringBuilder sb = new StringBuilder(
 					"http://chart.apis.google.com/chart?cht=lc&chdlp=b"
 					+ "&chtt=" + URLEncoder.encode("測定データ", "UTF-8")
+//					+ "&chs=" + width + "x" + height
 					+ "&chs=450x200"
 					+ "&chd=t:");
 
-			int lstCount = 1;
-			for(JDBeatsEntity entity : lstEntity) {
-				sb.append(entity.getValue1());
-				if (lstCount != lstEntity.size()) {
-					sb.append(",");
+			if (lstEntity != null) {
+				int lstCount = 1;
+				for(JDBeatsEntity entity : lstEntity) {
+					try {
+						Double value = Double.valueOf(entity.getValue1());
+						sb.append(value);
+					} catch(Exception e) {
+						//数値ではないデータは無効として"_"を登録する
+						sb.append("_");
+					}
+					if (lstCount != lstEntity.size()) {
+						sb.append(",");
+					}
+					lstCount++;
 				}
-				lstCount++;
+			} else {
+				sb.append("_");
 			}
-			
+
 			return sb.toString();
 		}
 	}
