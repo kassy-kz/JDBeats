@@ -1,10 +1,17 @@
 package com.androidtsubu.jdbeats;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,13 +19,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private Twitter mTwitter;
-	private String sTweet;
-	
+	private String mTweet;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,21 +37,28 @@ public class MainActivity extends Activity {
 			finish();
 		}
 
-		if (savedInstanceState == null) {
-			MainFragment fragment = new MainFragment();
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, fragment, "MainFragment").commit();
-		}
+//		if (savedInstanceState == null) {
+//			MainFragment fragment = new MainFragment();
+//			getFragmentManager().beginTransaction()
+//					.add(R.id.container, fragment, "MainFragment").commit();
+//		}
 		
+		if (savedInstanceState == null) {
+			ChartFragment fragment = new ChartFragment();
+			getFragmentManager().beginTransaction()
+					.add(R.id.container, fragment, "ChartFragment").commit();
+		}
+
 		mTwitter = TwitterUtils.getTwitterInstance(this);
-		sTweet = "#jdbeats";
-        
-		findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	tweet();
-            }
-        });
+		mTweet = "ついーと #jdbeats";
+
+		findViewById(R.id.button1).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						tweet();
+					}
+				});
 
 	}
 
@@ -83,33 +97,47 @@ public class MainActivity extends Activity {
 			return rootView;
 		}
 	}
-	
+
 	private void tweet() {
-        AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(String... params) {
-                try {
-                    mTwitter.updateStatus(params[0]);
-                    return true;
-                } catch (TwitterException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
+		AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
+			@Override
+			protected Boolean doInBackground(String... params) {
+				try {
+					StatusUpdate status = new StatusUpdate(mTweet);
+					
+					ImageView imageView = (ImageView) findViewById(R.id.chart);
+					if (imageView == null) {
+						return false;
+					}
+					Bitmap bmp = ((BitmapDrawable) imageView.getDrawable())
+							.getBitmap();
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
+					InputStream inputStream = new ByteArrayInputStream(
+							bos.toByteArray());
 
-            @Override
-            protected void onPostExecute(Boolean result) {
-                if (result) {
-                    showToast("ついーとＯＫ");
-                } else {
-                    showToast("ついーとＮＧ");
-                }
-            }
-        };
-        task.execute(sTweet);
-    }
+					status.media(mTweet, inputStream);
+					mTwitter.updateStatus(status);
+					return true;
+				} catch (TwitterException e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
 
-    private void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-    }
+			@Override
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					showToast("ついーとＯＫ");
+				} else {
+					showToast("ついーとＮＧ");
+				}
+			}
+		};
+		task.execute(mTweet);
+	}
+
+	private void showToast(String text) {
+		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+	}
 }
