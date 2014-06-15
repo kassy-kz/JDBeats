@@ -17,9 +17,9 @@ import android.os.Bundle;
 public class DBRegistActivity extends Activity {
 
 	/** 測定データ1(Key) */
-	private static final String VALUE1 = "VALUE1";
+	public static final String VALUE1 = "VALUE1";
 	/** 測定データ2(Key) */
-	private static final String VALUE2 = "VALUE2";
+	public static final String VALUE2 = "VALUE2";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +108,11 @@ public class DBRegistActivity extends Activity {
 			db.beginTransaction();
 			try {
 				db.insert(JDBeatsDBManager.DATABASE_TABLE, null, values);
-				db.endTransaction();
+				db.setTransactionSuccessful();
 			} catch(Exception e) {
 				result = RESULT_CANCELED;
+			} finally {
+				db.endTransaction();
 			}
 			return null;
 		}
