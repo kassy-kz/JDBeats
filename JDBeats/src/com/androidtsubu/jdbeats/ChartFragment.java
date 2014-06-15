@@ -129,7 +129,11 @@ public class ChartFragment extends Fragment {
 		 * @return
 		 */
 		private List<JDBeatsEntity> queryDB() {
-			String[] columns = {JDBeatsDBManager.Columns.KEY_ID, JDBeatsDBManager.Columns.KEY_VALUE1};
+			String[] columns = {
+					JDBeatsDBManager.Columns.KEY_ID,
+					JDBeatsDBManager.Columns.KEY_DATETIME,
+					JDBeatsDBManager.Columns.KEY_VALUE1
+			};
 			final String orderby = JDBeatsDBManager.Columns.KEY_ID + " DESC";
 			final String limit = "30";
 
