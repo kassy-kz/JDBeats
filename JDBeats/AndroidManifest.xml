@@ -59,6 +59,9 @@
                 android:resource="@xml/device_filter" />
             
         </activity>
+        
+         <activity android:name=".ChartFragment"></activity>
+        
 </application>
 
 </manifest>
