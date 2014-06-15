@@ -59,9 +59,11 @@
                 android:resource="@xml/device_filter" />
             
         </activity>
-        
-         <activity android:name=".ChartFragment"></activity>
-        
+        <activity android:name=".DBRegistActivity" android:theme="@android:style/Theme.Translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+        </activity>
 </application>
 
 </manifest>
