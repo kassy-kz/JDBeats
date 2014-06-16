@@ -162,6 +162,7 @@ public class ChartFragment extends Fragment {
 				lstEntity.add(entity);
 			}while(cursor.moveToNext());
 			
+			cursor.close();
 			return lstEntity;
 		}
 		
