@@ -10,8 +10,6 @@ import com.androidtsubu.jdbeats.event.OnFinishListener;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -67,12 +65,6 @@ public class DBRegistActivity extends Activity {
 			//DBへの登録処理が完了したらここに飛ぶ */
 			public void onFinish(int result) {
 				setResult(result);	// RESULT_OK: 登録成功、RESULT_CANCELED: 登録失敗
-				// TODO: ちょっとテスト@miguse				
-				Intent intent = new Intent("com.androidtsubu.jdbeats.MainActivity");
-                intent.putExtra("test", "testString");
-                startActivity(intent);
-                // TODO: ちょっとテスト@miguse	
-                
 				finish();
 			}
 		});
@@ -88,7 +80,6 @@ public class DBRegistActivity extends Activity {
 
 		private Context context;
 		private JDBeatsDBHelper helper;
-		private SQLiteDatabase db;
 		private OnFinishListener onFinishListener;
 		private int result;
 		
@@ -105,21 +96,19 @@ public class DBRegistActivity extends Activity {
 			}
 			JDBeatsEntity entity = params[0];
 			helper = new JDBeatsDBHelper(context);
-			db = helper.getWritableDatabase();
 			ContentValues values = new ContentValues();
 			values.put(JDBeatsDBManager.Columns.KEY_DATETIME, entity.getDateTime());
 			values.put(JDBeatsDBManager.Columns.KEY_VALUE1, entity.getValue1());
 			if (entity.getValue2() != null) {
 				values.put(JDBeatsDBManager.Columns.KEY_VALUE2, entity.getValue2());
 			}
-			db.beginTransaction();
+			helper.begin();
 			try {
-				db.insert(JDBeatsDBManager.DATABASE_TABLE, null, values);
-				db.setTransactionSuccessful();
+				helper.insert(null, values);
+				helper.commit();
 			} catch(Exception e) {
 				result = RESULT_CANCELED;
-			} finally {
-				db.endTransaction();
+				helper.rollback();
 			}
 			return null;
 		}

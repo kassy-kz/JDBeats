@@ -19,7 +19,6 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -138,10 +137,8 @@ public class ChartFragment extends Fragment {
 			final String limit = "30";
 
 			JDBeatsDBHelper helper = new JDBeatsDBHelper(context);
-			SQLiteDatabase db = helper.getWritableDatabase();
-			
-			Cursor cursor = db.query(
-					JDBeatsDBManager.DATABASE_TABLE,
+			Cursor cursor = helper.query(
+					false,
 					columns,
 					null,
 					null,
@@ -162,7 +159,6 @@ public class ChartFragment extends Fragment {
 				lstEntity.add(entity);
 			}while(cursor.moveToNext());
 			
-			cursor.close();
 			return lstEntity;
 		}
 		
