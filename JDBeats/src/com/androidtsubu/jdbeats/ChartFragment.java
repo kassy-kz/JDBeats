@@ -128,24 +128,15 @@ public class ChartFragment extends Fragment {
 		 * @return
 		 */
 		private List<JDBeatsEntity> queryDB() {
-			String[] columns = {
-					JDBeatsDBManager.Columns.KEY_ID,
-					JDBeatsDBManager.Columns.KEY_DATETIME,
-					JDBeatsDBManager.Columns.KEY_VALUE1
-			};
-			final String orderby = JDBeatsDBManager.Columns.KEY_ID + " DESC";
-			final String limit = "30";
+			final String limit = "15";
 
 			JDBeatsDBHelper helper = new JDBeatsDBHelper(context);
 			Cursor cursor = helper.query(
-					false,
-					columns,
-					null,
-					null,
-					null,
-					null,
-					orderby,
-					limit);
+					"SELECT DISTINCT jdbeats._id, jdbeats.datetime, jdbeats._value1 FROM jdbeats, jdbeats tmp "
+					+ "WHERE jdbeats.datetime >= tmp.datetime GROUP BY jdbeats._id, jdbeats.datetime, jdbeats._value1 "
+					+ "HAVING COUNT(*) <= " + limit + " ORDER BY COUNT(*);"
+					, null);
+
 			if (cursor == null || cursor.moveToFirst() == false) {
 				return null;
 			}

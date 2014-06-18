@@ -49,6 +49,16 @@ public class JDBeatsDBHelper extends SQLiteOpenHelper {
 	
 	/**
 	 * 
+	 * @param sql
+	 * @param selectionArgs
+	 * @return
+	 */
+	public Cursor query(String sql, String[] selectionArgs) {
+		return getWritableDatabase().rawQuery(sql, selectionArgs);
+	}
+	
+	/**
+	 * 
 	 * @param nullColumnHack
 	 * @param values
 	 * @return
