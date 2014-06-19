@@ -19,7 +19,6 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -129,22 +128,15 @@ public class ChartFragment extends Fragment {
 		 * @return
 		 */
 		private List<JDBeatsEntity> queryDB() {
-			String[] columns = {JDBeatsDBManager.Columns.KEY_ID, JDBeatsDBManager.Columns.KEY_VALUE1};
-			final String orderby = JDBeatsDBManager.Columns.KEY_ID + " DESC";
-			final String limit = "30";
+			final String limit = "15";
 
 			JDBeatsDBHelper helper = new JDBeatsDBHelper(context);
-			SQLiteDatabase db = helper.getWritableDatabase();
-			
-			Cursor cursor = db.query(
-					JDBeatsDBManager.DATABASE_TABLE,
-					columns,
-					null,
-					null,
-					null,
-					null,
-					orderby,
-					limit);
+			Cursor cursor = helper.query(
+					"SELECT DISTINCT jdbeats._id, jdbeats.datetime, jdbeats._value1 FROM jdbeats, jdbeats tmp "
+					+ "WHERE jdbeats.datetime >= tmp.datetime GROUP BY jdbeats._id, jdbeats.datetime, jdbeats._value1 "
+					+ "HAVING COUNT(*) <= " + limit + " ORDER BY COUNT(*);"
+					, null);
+
 			if (cursor == null || cursor.moveToFirst() == false) {
 				return null;
 			}
