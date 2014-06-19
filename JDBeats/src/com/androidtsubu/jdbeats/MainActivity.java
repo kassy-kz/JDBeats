@@ -10,6 +10,7 @@ import twitter4j.TwitterException;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -22,6 +23,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.androidtsubu.jdbeats.db.JDBeatsDBHelper;
+
+/**
+ * Twitter投稿用Activity
+ * 
+ * @author miguse
+ * 
+ */
 public class MainActivity extends Activity {
 	private Twitter mTwitter;
 	private String mTweet;
@@ -37,25 +46,32 @@ public class MainActivity extends Activity {
 			finish();
 		}
 
-//		if (savedInstanceState == null) {
-//			MainFragment fragment = new MainFragment();
-//			getFragmentManager().beginTransaction()
-//					.add(R.id.container, fragment, "MainFragment").commit();
-//		}
-		
+		mTwitter = TwitterUtils.getTwitterInstance(this);
+
 		if (savedInstanceState == null) {
 			ChartFragment fragment = new ChartFragment();
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, fragment, "ChartFragment").commit();
 		}
 
-		mTwitter = TwitterUtils.getTwitterInstance(this);
-		mTweet = "ついーと #jdbeats";
-
 		findViewById(R.id.button1).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
+
+						/* DBから最新の計測値を取得 */
+						JDBeatsDBHelper helper = new JDBeatsDBHelper(
+								MainActivity.this);
+						Cursor cursor = helper
+								.query("SELECT MAX(jdbeats.datetime), jdbeats._value1, jdbeats._value2 FROM jdbeats;",
+										null);
+
+						cursor.moveToFirst();
+
+						mTweet = cursor.getString(0) + "時点のmiguseのパワー："
+								+ cursor.getString(1) + "Kg / " + "JDのパワー:"
+								+ cursor.getString(2) + "Kg #jdbeats";
+
 						tweet();
 					}
 				});
@@ -104,7 +120,7 @@ public class MainActivity extends Activity {
 			protected Boolean doInBackground(String... params) {
 				try {
 					StatusUpdate status = new StatusUpdate(mTweet);
-					
+
 					ImageView imageView = (ImageView) findViewById(R.id.chart);
 					if (imageView == null) {
 						return false;
