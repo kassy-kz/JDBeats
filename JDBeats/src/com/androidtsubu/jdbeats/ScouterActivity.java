@@ -1,7 +1,11 @@
 package com.androidtsubu.jdbeats;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import ioio.lib.api.AnalogInput;
@@ -10,7 +14,7 @@ import ioio.lib.util.BaseIOIOLooper;
 import ioio.lib.util.IOIOLooper;
 import ioio.lib.util.android.IOIOActivity;
 
-public class ScouterActivity extends IOIOActivity {
+public class ScouterActivity extends IOIOActivity implements OnClickListener {
 
     private static final String TAG = "ScouterActivity";
     TextView mTxtInput;
@@ -24,6 +28,7 @@ public class ScouterActivity extends IOIOActivity {
     TextView mTxtValue2;
     TextView mTxtValue2Min, mTxtValue2Max;
     TextView mTxtMax;
+
     static int sInitialValue;
     static int sMaxValue;
     
@@ -50,6 +55,8 @@ public class ScouterActivity extends IOIOActivity {
         mTxtValueMax = (TextView) findViewById(R.id.txtScouterValueMax);
         mTxtValueMin = (TextView) findViewById(R.id.txtScouterValueMin);
         mTxtMax = (TextView) findViewById(R.id.txtScouterMax);
+        Button btnFinish = (Button) findViewById(R.id.btnFinish);
+        btnFinish.setOnClickListener(this);
     }
     
     @Override
@@ -223,6 +230,23 @@ public class ScouterActivity extends IOIOActivity {
                 textView.setText(Integer.toString(value2));
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnFinish:
+                // 計測終了
+                Intent intent1 = new Intent(this, DBRegistActivity.class);
+                intent1.putExtra("VALUE1", sMaxValue);
+                startActivity(intent1);
+                finish();
+                break;
+
+            default:
+                break;
+        }
+        
     }
 
 }
