@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.androidtsubu.jdbeats.db.JDBeatsDBHelper;
-import com.androidtsubu.jdbeats.db.JDBeatsDBManager;
 import com.androidtsubu.jdbeats.db.JDBeatsEntity;
 
 import android.app.Fragment;
@@ -92,8 +91,6 @@ public class ChartFragment extends Fragment {
 	public static class ChartLoader extends AsyncTaskLoader<Drawable> {
 		
 		private Context context;
-		private int width;
-		private int height;
 
 		/**
 		 * コンストラクタ
@@ -102,8 +99,6 @@ public class ChartFragment extends Fragment {
 		public ChartLoader(Context context, int width, int height) {
 			super(context);
 			this.context = context;
-			this.width = width;
-			this.height = height;
 		}
 
 		private Drawable downloadGraph(List<JDBeatsEntity> lstEntity) {
@@ -133,7 +128,7 @@ public class ChartFragment extends Fragment {
 			JDBeatsDBHelper helper = new JDBeatsDBHelper(context);
 			Cursor cursor = helper.query(
 					"SELECT DISTINCT jdbeats._id, jdbeats.datetime, jdbeats._value1 FROM jdbeats, jdbeats tmp "
-					+ "WHERE jdbeats.datetime >= tmp.datetime GROUP BY jdbeats._id, jdbeats.datetime, jdbeats._value1 "
+					+ "WHERE jdbeats._id >= tmp._id GROUP BY jdbeats._id, jdbeats.datetime, jdbeats._value1 "
 					+ "HAVING COUNT(*) <= " + limit + " ORDER BY COUNT(*);"
 					, null);
 
