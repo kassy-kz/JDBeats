@@ -1,5 +1,7 @@
 package com.androidtsubu.jdbeats.db;
 
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -64,6 +66,9 @@ public class JDBeatsDBHelper extends SQLiteOpenHelper {
 	 * @return
 	 */
 	public long insert(String nullColumnHack, ContentValues values) {
+		if (values.containsKey(JDBeatsDBManager.Columns.KEY_DATETIME) == false) {
+			values.put(JDBeatsDBManager.Columns.KEY_DATETIME, new Date().getTime());
+		}
 		return getWritableDatabase().insert(JDBeatsDBManager.DATABASE_TABLE, nullColumnHack, values);
 	}
 	

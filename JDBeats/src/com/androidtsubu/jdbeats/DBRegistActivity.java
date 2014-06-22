@@ -16,9 +16,9 @@ import android.os.Bundle;
 public class DBRegistActivity extends Activity {
 
 	/** 測定データ1(Key) */
-	public static final String VALUE1 = "VALUE1";
+	public static final String VALUE1 = JDBeatsDBManager.Columns.KEY_VALUE1;
 	/** 測定データ2(Key) */
-	public static final String VALUE2 = "VALUE2";
+	public static final String VALUE2 = JDBeatsDBManager.Columns.KEY_VALUE2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

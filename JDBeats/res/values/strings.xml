@@ -10,4 +10,8 @@
     <string name="twitter_callback_url">miguse://twitter</string>
     <string name="strScouterActivityName">Scouter</string>
     
+    <string name="db_limit">15</string>
+    <string name="zannen_value">291</string>
+    <string name="jdboss_value">394</string>
+    
 </resources>
