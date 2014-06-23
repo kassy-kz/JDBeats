@@ -240,7 +240,7 @@ public class ScouterActivity extends IOIOActivity implements OnClickListener {
             case R.id.btnFinish:
                 // 計測終了
                 Intent intent1 = new Intent(this, DBRegistActivity.class);
-                intent1.putExtra(JDBeatsDBManager.Columns.KEY_VALUE1, sMaxValue);
+                intent1.putExtra(JDBeatsDBManager.Columns.KEY_VALUE1, String.valueOf(sMaxValue));
                 startActivity(intent1);
                 finish();
                 break;

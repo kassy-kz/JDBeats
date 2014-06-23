@@ -3,6 +3,8 @@ package com.androidtsubu.jdbeats;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -63,14 +65,17 @@ public class MainActivity extends Activity {
 						JDBeatsDBHelper helper = new JDBeatsDBHelper(
 								MainActivity.this);
 						Cursor cursor = helper
-								.query("SELECT MAX(jdbeats.datetime), jdbeats._value1, jdbeats._value2 FROM jdbeats;",
+								.query("SELECT MAX(jdbeats._id), jdbeats._value1, jdbeats._value2 FROM jdbeats;",
 										null);
 
 						cursor.moveToFirst();
 
-						mTweet = cursor.getString(0) + "時点のmiguseのパワー："
-								+ cursor.getString(1) + "Kg / " + "JDのパワー:"
-								+ cursor.getString(2) + "Kg #jdbeats";
+						Calendar clen = Calendar.getInstance();
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+				        String strGetTime = sdf.format(clen.getTime());
+						
+						mTweet = strGetTime + "時点のmiguse："
+								+ cursor.getString(1) + "JDP #jdbeats";
 
 						tweet();
 					}
