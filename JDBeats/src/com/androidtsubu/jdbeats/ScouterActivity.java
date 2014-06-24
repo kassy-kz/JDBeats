@@ -245,16 +245,19 @@ public class ScouterActivity extends IOIOActivity implements OnClickListener {
 
 		switch (v.getId()) {
 		case R.id.btnFinish:
-			// 計測終了
+			// 計測結果をDBに登録
 			Intent intent1 = new Intent(this, DBRegistActivity.class);
 			intent1.putExtra(JDBeatsDBManager.Columns.KEY_VALUE1,
 					String.valueOf(sMaxValue));
 			startActivityForResult(intent1, dbResult);
 
 			// グラフ描画
-			Toast.makeText(this, "DB結果:" + dbResult , Toast.LENGTH_SHORT).show();
+			if (dbResult == RESULT_OK) {
+				Intent intent2 = new Intent(this, MainActivity.class);
+				startActivity(intent2, null);
+				finish();
+			}
 
-			finish();
 			break;
 
 		default:
