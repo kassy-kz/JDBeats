@@ -17,9 +17,9 @@
     <string name="chart_title">Arm-Wrestling Power(AWP)</string>
     <string name="chart_v_axis_legend">AWP</string>
     
-    <string name="chart_h_axis_legend_1">Date</string>
+    <string name="chart_h_axis_legend_1">測定日</string>
     <string name="chart_h_axis_legend_2">YOU</string>
-    <string name="chart_h_axis_legend_3">ZANNEN</string>
-    <string name="chart_h_axis_legend_4">MAXIMUM JD</string>
+    <string name="chart_h_axis_legend_3">残念女王</string>
+    <string name="chart_h_axis_legend_4">最強JD</string>
     
 </resources>

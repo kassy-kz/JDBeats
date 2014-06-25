@@ -154,7 +154,7 @@ public class ChartFragment2 extends Fragment {
 		@Override
 		public void onLoadFinished(Loader<String> loader, String data) {
 			if (mWebView != null) {
-				mWebView.loadData(data, "text/html", "utf-8");
+				mWebView.loadData(data, "text/html; charset=utf-8", "utf-8");
 			}
 		}
 

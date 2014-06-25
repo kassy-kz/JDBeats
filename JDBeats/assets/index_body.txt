@@ -1,5 +1,5 @@
 	<body>
-		<div id="chart_div" style="width: 100%; height: 50%;"></div>
+		<div id="chart_div" style="width: 110%; height: 50%;"></div>
 		<div id="table_div" style="width: 100%; height: 55%;"></div>
 	</body>
 </html>
