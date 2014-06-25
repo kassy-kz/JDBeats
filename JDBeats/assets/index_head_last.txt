@@ -1,0 +1,32 @@
+				
+			var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+			google.visualization.events.addListener(chart, 'ready', chartFinished);
+			chart.draw(data, chart_options);
+			
+			var formatter = new google.visualization.NumberFormat({pattern: '####'});
+			formatter.format(data, 1);
+			var table = new google.visualization.Table(document.getElementById('table_div'));
+			google.visualization.events.addListener(table, 'ready', tableFinished);
+			table.draw(data, {showRowNumber: true, sort: 'disable'});
+			
+			google.visualization.events.addListener(table, 'select', function() {
+				chart.setSelection(table.getSelection());
+			});
+			google.visualization.events.addListener(chart, 'select', function() {
+				var selection = chart.getSelection();
+				for (var i = 0; i < selection.length; i++) {
+					selection[i].column = null;
+				}
+				table.setSelection(selection);
+			});
+		});
+
+		function chartFinished() {
+			AndroidEvent.readyEvent(1);
+		}	
+		
+		function tableFinished() {
+			AndroidEvent.readyEvent(2);
+		}
+		</script>
+	</head>

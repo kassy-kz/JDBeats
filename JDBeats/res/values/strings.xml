@@ -10,8 +10,16 @@
     <string name="twitter_callback_url">miguse://twitter</string>
     <string name="strScouterActivityName">Scouter</string>
     
-    <string name="db_limit">15</string>
+    <string name="db_limit">10</string>
     <string name="zannen_value">291</string>
     <string name="jdboss_value">394</string>
+    
+    <string name="chart_title">Arm-Wrestling Power(AWP)</string>
+    <string name="chart_v_axis_legend">AWP</string>
+    
+    <string name="chart_h_axis_legend_1">Date</string>
+    <string name="chart_h_axis_legend_2">YOU</string>
+    <string name="chart_h_axis_legend_3">ZANNEN</string>
+    <string name="chart_h_axis_legend_4">MAXIMUM JD</string>
     
 </resources>
