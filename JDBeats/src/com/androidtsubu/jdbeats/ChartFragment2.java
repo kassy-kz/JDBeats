@@ -110,6 +110,13 @@ public class ChartFragment2 extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		draw();
+	}
+
+	/**
+	 * グラフを描画する
+	 */
+	public void draw() {
 		LoaderManager manager = getLoaderManager();
 		manager.initLoader(0, null, mCallback).forceLoad();
 	}

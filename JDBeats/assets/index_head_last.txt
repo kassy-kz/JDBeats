@@ -4,12 +4,16 @@
 			google.visualization.events.addListener(chart, 'error', chartError);
 			chart.draw(data, chart_options);
 			
-			var formatter = new google.visualization.NumberFormat({pattern: '####'});
+			var formatter = new google.visualization.NumberFormat({pattern: '####.0'});
 			formatter.format(data, 1);
+			formatter.format(data, 2);
+			formatter.format(data, 3);
+			
+			tableFormatter.format(data, 1);
 			var table = new google.visualization.Table(document.getElementById('table_div'));
 			google.visualization.events.addListener(table, 'ready', tableFinished);
 			google.visualization.events.addListener(table, 'error', tableError);
-			table.draw(data, {showRowNumber: true, sort: 'disable'});
+			table.draw(data, {showRowNumber: true, sort: 'disable', allowHtml: true});
 			
 			google.visualization.events.addListener(table, 'select', function() {
 				chart.setSelection(table.getSelection());

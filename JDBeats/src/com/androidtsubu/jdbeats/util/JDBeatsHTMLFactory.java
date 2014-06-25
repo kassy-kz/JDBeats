@@ -58,7 +58,7 @@ public class JDBeatsHTMLFactory {
 		
 		// グラフタイトル生成
 		sb.append(createChartTitle());
-
+		
 		// HTMLヘッダ部(後半)
 		sb.append(readAssetsFile("index_head_last.txt"));
 		
@@ -131,6 +131,23 @@ public class JDBeatsHTMLFactory {
 			} while (cursor.moveToNext());
 		}
 		sb.append("]);");
+		
+		sb.append(createDataFormatter(zannenValue, jdbossValue));
+
+		return sb.toString();
+	}
+	
+	/**
+	 * 表のフォーマッタを定義する
+	 * @param zannenValue
+	 * @param jdbossValue
+	 * @return
+	 */
+	private String createDataFormatter(String zannenValue, String jdbossValue) {
+		StringBuilder sb = new StringBuilder("var tableFormatter = new google.visualization.ColorFormat();\n");
+		sb.append("tableFormatter.addRange(0, " + zannenValue + ", 'black', '#FFFFFF');\n");
+		sb.append("tableFormatter.addRange(" + zannenValue + ", " + jdbossValue + ", 'black', '#99CC99');\n");
+		sb.append("tableFormatter.addRange(" + jdbossValue + ", null, 'white', '#FF0000');\n");
 		return sb.toString();
 	}
 
