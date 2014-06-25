@@ -1,12 +1,14 @@
 				
 			var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 			google.visualization.events.addListener(chart, 'ready', chartFinished);
+			google.visualization.events.addListener(chart, 'error', chartError);
 			chart.draw(data, chart_options);
 			
 			var formatter = new google.visualization.NumberFormat({pattern: '####'});
 			formatter.format(data, 1);
 			var table = new google.visualization.Table(document.getElementById('table_div'));
 			google.visualization.events.addListener(table, 'ready', tableFinished);
+			google.visualization.events.addListener(table, 'error', tableError);
 			table.draw(data, {showRowNumber: true, sort: 'disable'});
 			
 			google.visualization.events.addListener(table, 'select', function() {
@@ -28,5 +30,14 @@
 		function tableFinished() {
 			AndroidEvent.readyEvent(2);
 		}
+		
+		function chartError(err) {
+			AndroidEvent.errorEvent();
+		}
+		
+		function tableError(err) {
+			AndroidEvent.errorEvent();
+		}
+
 		</script>
 	</head>

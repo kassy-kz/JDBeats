@@ -1,7 +1,8 @@
 package com.androidtsubu.jdbeats;
 
 import com.androidtsubu.jdbeats.db.JDBeatsDBHelper;
-import com.androidtsubu.jdbeats.event.OnFinishListener;
+import com.androidtsubu.jdbeats.event.OnDrawFailureListener;
+import com.androidtsubu.jdbeats.event.OnDrawSuccessListener;
 import com.androidtsubu.jdbeats.util.JDBeatsHTMLFactory;
 import com.androidtsubu.jdbeats.util.Validator;
 
@@ -35,11 +36,11 @@ public class ChartFragment2 extends Fragment {
 	/** 表描画フラグ */
 	private boolean mIsTableDraw;
 
-	/** 描画終了(成功) */
-	public static final int DRAW_SUCCESS = 1;
+	/** 描画成功通知 */
+	private OnDrawSuccessListener mSuccessListener;
 	
-	/** 描画終了(失敗) */
-	public static final int DRAW_FAIL = 0;
+	/** 描画失敗通知 */
+	private OnDrawFailureListener mFailureListener;
 
 	/** 表示待ちアニメーションを停止するためのハンドラ */
 	@SuppressLint("HandlerLeak")
@@ -58,8 +59,8 @@ public class ChartFragment2 extends Fragment {
 			case -1:	// 失敗
 				mIsChartDraw = false;
 				mIsTableDraw = false;
-				if (mListener != null) {
-					mListener.onFinish(DRAW_FAIL);
+				if (mFailureListener != null) {
+					mFailureListener.onDrawFailure();
 				}
 			}
 
@@ -67,8 +68,8 @@ public class ChartFragment2 extends Fragment {
 			if (mIsChartDraw && mIsTableDraw) {
 				mProgressBar.setVisibility(View.GONE);
 				mProgressBar.setEnabled(false);
-				if (mListener != null) {
-					mListener.onFinish(DRAW_SUCCESS);
+				if (mSuccessListener != null) {
+					mSuccessListener.onDrawSuccess();
 				}
 			} else {
 				mProgressBar.setVisibility(View.VISIBLE);
@@ -77,15 +78,20 @@ public class ChartFragment2 extends Fragment {
 	};
 
 	
-	/** 描画終了を通知するイベントハンドラ */
-	private OnFinishListener mListener;
-
 	/**
 	 * グラフ描画終了を通知するイベントハンドラ
 	 * @param listener リスナ
 	 */
-	public void setOnFinishListener(OnFinishListener listener) {
-		mListener = listener;
+	public void setOnDrawSuccessListener(OnDrawSuccessListener listener) {
+		mSuccessListener = listener;
+	}
+	
+	/**
+	 * グラフ描画失敗を通知するイベントハンドラ
+	 * @param listener リスナ
+	 */
+	public void setOnDrawFailureListener(OnDrawFailureListener listener) {
+		mFailureListener = listener;
 	}
 	
 	@SuppressLint("SetJavaScriptEnabled")
