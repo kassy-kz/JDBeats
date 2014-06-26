@@ -241,7 +241,6 @@ public class ScouterActivity extends IOIOActivity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        int dbResult = RESULT_OK;
 
         switch (v.getId()) {
             case R.id.btnFinish:
@@ -249,15 +248,8 @@ public class ScouterActivity extends IOIOActivity implements OnClickListener {
                 Intent intent1 = new Intent(this, DBRegistActivity.class);
                 intent1.putExtra(JDBeatsDBManager.Columns.KEY_VALUE1,
                         String.valueOf(sMaxValue));
-                startActivityForResult(intent1, dbResult);
-
-                // グラフ描画
-                if (dbResult == RESULT_OK) {
-                    Intent intent2 = new Intent(this, MainActivity.class);
-                    startActivity(intent2, null);
-                    finish();
-                }
-
+                startActivity(intent1);
+                finish();
                 break;
 
             default:
