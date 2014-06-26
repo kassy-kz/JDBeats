@@ -12,10 +12,8 @@ import java.util.List;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import android.R.string;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -31,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.androidtsubu.jdbeats.db.JDBeatsDBHelper;
-import com.androidtsubu.jdbeats.db.JDBeatsDBManager;
 import com.androidtsubu.jdbeats.db.JDBeatsEntity;
 
 /**
@@ -67,17 +64,6 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View v) {
 
-                        Calendar clen = Calendar.getInstance();
-                        SimpleDateFormat sdf = new SimpleDateFormat(
-                                "mmss");
-                        String strGetTime = sdf.format(clen.getTime());
-
-                        // 計測結果をDBに登録
-                        Intent intent1 = new Intent(MainActivity.this, DBRegistActivity.class);
-                        intent1.putExtra(JDBeatsDBManager.Columns.KEY_VALUE1,
-                                String.valueOf(strGetTime));
-                        startActivity(intent1);
-
                         /* DBから最新の計測値を取得 */
                         JDBeatsDBHelper helper = new JDBeatsDBHelper(
                                 MainActivity.this);
@@ -94,10 +80,10 @@ public class MainActivity extends Activity {
                                 lstEntity.add(entity);
                             } while (cursor.moveToNext());
 
-                            // Calendar clen = Calendar.getInstance();
-                            // SimpleDateFormat sdf = new SimpleDateFormat(
-                            // "yyyy/MM/dd HH:mm");
-                            // String strGetTime = sdf.format(clen.getTime());
+                            Calendar clen = Calendar.getInstance();
+                            SimpleDateFormat sdf = new SimpleDateFormat(
+                                    "yyyy/MM/dd HH:mm");
+                            String strGetTime = sdf.format(clen.getTime());
 
                             mTweet = strGetTime
                                     + "時点のmiguse："
@@ -109,21 +95,11 @@ public class MainActivity extends Activity {
                         }
                     }
                 });
-
     }
 
     protected void onResume() {
         super.onResume();
-        Calendar clen = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(
-                "mmss");
-        String strGetTime = sdf.format(clen.getTime());
 
-        // 計測結果をDBに登録
-        Intent intent1 = new Intent(MainActivity.this, DBRegistActivity.class);
-        intent1.putExtra(JDBeatsDBManager.Columns.KEY_VALUE1,
-                String.valueOf(strGetTime));
-        startActivity(intent1);
     }
 
     public boolean onCreatOptionsMenu(Menu menu) {
