@@ -4,13 +4,17 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import android.R.string;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -26,6 +30,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.androidtsubu.jdbeats.db.JDBeatsDBHelper;
+import com.androidtsubu.jdbeats.db.JDBeatsDBManager;
+import com.androidtsubu.jdbeats.db.JDBeatsEntity;
 
 /**
  * Twitter投稿用Activity
@@ -37,6 +43,7 @@ public class MainActivity extends Activity {
 	private Twitter mTwitter;
 	private String mTweet;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,36 +60,74 @@ public class MainActivity extends Activity {
 		if (savedInstanceState == null) {
 			ChartFragment fragment = new ChartFragment();
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, fragment, "ChartFragment").commit();
+					.add(R.id.container, fragment, "ChartFragment2").commit();
 		}
 
 		findViewById(R.id.button1).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-
+				  
+					    Calendar clen = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat(
+                                "mmss");
+                        String strGetTime = sdf.format(clen.getTime());
+                        
+					 // 計測結果をDBに登録
+			            Intent intent1 = new Intent(MainActivity.this, DBRegistActivity.class);
+			            intent1.putExtra(JDBeatsDBManager.Columns.KEY_VALUE1,
+			                    String.valueOf(strGetTime));
+			            startActivity(intent1);
+	                 
+					    
 						/* DBから最新の計測値を取得 */
 						JDBeatsDBHelper helper = new JDBeatsDBHelper(
 								MainActivity.this);
 						Cursor cursor = helper
-								.query("SELECT MAX(jdbeats._id), jdbeats._value1, jdbeats._value2 FROM jdbeats;",
+								.query("SELECT jdbeats._id, jdbeats._value1 FROM jdbeats;",
 										null);
 
-						cursor.moveToFirst();
+						if (cursor.moveToFirst() == true) {
+							List<JDBeatsEntity> lstEntity = new ArrayList<JDBeatsEntity>();
+							do {
+								JDBeatsEntity entity = new JDBeatsEntity();
+								entity.setId(cursor.getInt(0));
+								entity.setValue1(cursor.getString(1));
+								lstEntity.add(entity);
+							} while (cursor.moveToNext());
 
-						Calendar clen = Calendar.getInstance();
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-				        String strGetTime = sdf.format(clen.getTime());
-						
-						mTweet = strGetTime + "時点のmiguse："
-								+ cursor.getString(1) + "JDP #jdbeats";
+//							Calendar clen = Calendar.getInstance();
+//							SimpleDateFormat sdf = new SimpleDateFormat(
+//									"yyyy/MM/dd HH:mm");
+//							String strGetTime = sdf.format(clen.getTime());
 
-						tweet();
+							mTweet = strGetTime
+									+ "時点のmiguse："
+									+ lstEntity.get(lstEntity.size() - 1)
+											.getValue1()
+									+ "AWP　/ 目標値　JD:394AWP /　参考値　残念女王:291AWP #jdbeats";
+							showToast(mTweet);
+//							tweet();
+						}
 					}
 				});
 
 	}
 
+	protected void onResume() {
+	    super.onResume();
+	    Calendar clen = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(
+                "mmss");
+        String strGetTime = sdf.format(clen.getTime());
+        
+     // 計測結果をDBに登録
+        Intent intent1 = new Intent(MainActivity.this, DBRegistActivity.class);
+        intent1.putExtra(JDBeatsDBManager.Columns.KEY_VALUE1,
+                String.valueOf(strGetTime));
+        startActivity(intent1);
+	}
+	 
 	public boolean onCreatOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
