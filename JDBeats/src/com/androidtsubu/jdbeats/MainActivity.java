@@ -91,7 +91,7 @@ public class MainActivity extends Activity {
                                             .getValue1()
                                     + "AWP　/ 目標値　JD:394AWP /　参考値　残念女王:291AWP #jdbeats";
                             showToast(mTweet);
-                            // tweet();
+                            tweet();
                         }
                     }
                 });
