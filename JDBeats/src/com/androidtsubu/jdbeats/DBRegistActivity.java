@@ -67,8 +67,10 @@ public class DBRegistActivity extends Activity {
 			public void onFinish(int result) {
 				setResult(result);	// RESULT_OK: 登録成功、RESULT_CANCELED: 登録失敗
 				// ツイート送信画面に遷移
-				Intent intent = new Intent(DBRegistActivity.this, MainActivity.class);
-                startActivity(intent);
+				if (result == RESULT_OK) {
+        			Intent intent = new Intent(DBRegistActivity.this, MainActivity.class);
+                    startActivity(intent);
+				}
 				finish();
 			}
 		});
