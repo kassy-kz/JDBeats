@@ -10,6 +10,7 @@ import com.androidtsubu.jdbeats.event.OnFinishListener;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -65,6 +66,9 @@ public class DBRegistActivity extends Activity {
 			//DBへの登録処理が完了したらここに飛ぶ */
 			public void onFinish(int result) {
 				setResult(result);	// RESULT_OK: 登録成功、RESULT_CANCELED: 登録失敗
+				// ツイート送信画面に遷移
+				Intent intent = new Intent(DBRegistActivity.this, MainActivity.class);
+                startActivity(intent);
 				finish();
 			}
 		});
