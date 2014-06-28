@@ -17,6 +17,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Picture;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,11 +27,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.androidtsubu.jdbeats.db.JDBeatsDBHelper;
 import com.androidtsubu.jdbeats.db.JDBeatsEntity;
+import com.androidtsubu.jdbeats.event.OnDrawFailureListener;
+import com.androidtsubu.jdbeats.event.OnDrawSuccessListener;
 
 /**
  * Twitter投稿用Activity
@@ -54,9 +59,26 @@ public class MainActivity extends Activity {
         mTwitter = TwitterUtils.getTwitterInstance(this);
 
         if (savedInstanceState == null) {
-            ChartFragment fragment = new ChartFragment();
+            final ChartFragment2 fragment2 = new ChartFragment2();
+            // グラフ描画が正常終了した時にonDrawSuccess()が呼び出される
+            fragment2.setOnDrawSuccessListener(new OnDrawSuccessListener() {
+                @Override
+                public void onDrawSuccess() {
+                    // 描画が正常終了したので、ビットマップが取得できる
+                    // 描画が正常終了していない間(描画中や失敗時)はビットマップは取得できない(nullが返る)
+                    Bitmap bitmap = fragment2.getGraph();
+                }
+            });
+
+            // グラフ描画が失敗した時にonDrawFailure()が呼び出される
+            fragment2.setOnDrawFailureListener(new OnDrawFailureListener() {
+                @Override
+                public void onDrawFailure() {
+                    // グラフ描画が失敗した場合の処理
+                }
+            });
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment, "ChartFragment2").commit();
+                    .add(R.id.container, fragment2, "ChartFragment2").commit();
         }
 
         findViewById(R.id.button1).setOnClickListener(
@@ -91,7 +113,7 @@ public class MainActivity extends Activity {
                                             .getValue1()
                                     + "AWP　/ 目標値　JD:394AWP /　参考値　残念女王:291AWP #jdbeats";
                             showToast(mTweet);
-                            tweet();
+                            // tweet(bitmap);
                         }
                     }
                 });
@@ -138,19 +160,17 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void tweet() {
+    private void tweet(final Bitmap bmp) {
         AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(String... params) {
                 try {
                     StatusUpdate status = new StatusUpdate(mTweet);
 
-                    ImageView imageView = (ImageView) findViewById(R.id.chart);
-                    if (imageView == null) {
+                    if (bmp == null) {
                         return false;
                     }
-                    Bitmap bmp = ((BitmapDrawable) imageView.getDrawable())
-                            .getBitmap();
+
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
                     InputStream inputStream = new ByteArrayInputStream(
