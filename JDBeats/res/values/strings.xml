@@ -12,6 +12,14 @@
     <string name="db_limit">10</string>
     <string name="zannen_value">291</string>
     <string name="jdboss_value">394</string>
+    <string name="unit_awp">AWP</string>
+    <string name="header_miguse">時点の</string>
+    <string name="header_jdboss">　/ 目標値　</string>
+    <string name="header_zannen"> /　参考値　</string>
+    <string name="name_miguse">miguse:</string>
+    <string name="name_jdboss">最強JD:</string>
+    <string name="name_zannen">残念女王:</string>
+    <string name="hash_tag"> #jdbeats</string>
     
     <string name="chart_title">Arm-Wrestling Power(AWP)</string>
     <string name="chart_v_axis_legend">AWP</string>

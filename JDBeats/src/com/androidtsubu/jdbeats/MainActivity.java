@@ -86,15 +86,25 @@ public class MainActivity extends Activity {
                             String strGetTime = sdf.format(clen.getTime());
 
                             mTweet = strGetTime
-                                    + "時点のmiguse："
+                                    + getResourcesText(R.string.header_miguse)
+                                    + getResourcesText(R.string.name_miguse)
                                     + lstEntity.get(lstEntity.size() - 1)
                                             .getValue1()
-                                    + "AWP　/ 目標値　JD:394AWP /　参考値　残念女王:291AWP #jdbeats";
+                                    + getResourcesText(R.string.unit_awp)
+                                    + getResourcesText(R.string.header_jdboss)
+                                    + getResourcesText(R.string.name_jdboss)
+                                    + getResourcesText(R.string.jdboss_value)
+                                    + getResourcesText(R.string.unit_awp)
+                                    + getResourcesText(R.string.header_zannen)
+                                    + getResourcesText(R.string.name_zannen)
+                                    + getResourcesText(R.string.zannen_value)
+                                    + getResourcesText(R.string.unit_awp)
+                                    + getResourcesText(R.string.hash_tag);
                         } else {
                             mTweet = "";
                         }
-
-                        tweet(bitmap);
+                        showToast(mTweet);
+                         tweet(bitmap);
                     }
                 }
             });
@@ -191,5 +201,9 @@ public class MainActivity extends Activity {
 
     private void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    private CharSequence getResourcesText(int r_id) {
+        return getResources().getText(r_id);
     }
 }
