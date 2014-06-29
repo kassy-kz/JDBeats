@@ -20,11 +20,13 @@
     <string name="name_jdboss">最強JD:</string>
     <string name="name_zannen">残念女王:</string>
     <string name="hash_tag"> #jdbeats</string>
-    <string name="jd_comment1">@兎月「しょぼいですね。もっと頑張れないんですか？」</string>
-    <string name="jd_comment2">@兎月「少しは頑張ったみたいですね。少しは。」</string>
-    <string name="jd_comment3">@兎月「面白くもなんともない結果ですね。」</string>
-    <string name="jd_comment4">@兎月「暇な時間があるなら少しは努力というものをしたらどうですか。」</string>
-    <string name="jd_comment5">@兎月「頑張ったみたいですね。少しは認めてあげます。」</string>
+    <string name="jd_comment_header">兎月「</string>
+    <string name="jd_comment_footer">」</string>
+    <string name="jd_comment1">しょぼいですね。もっと頑張れないんですか？</string>
+    <string name="jd_comment2">少しは頑張ったみたいですね。少しは。</string>
+    <string name="jd_comment3">面白くもなんともない結果ですね。</string>
+    <string name="jd_comment4">暇な時間があるなら少しは努力というものをしたらどうですか。</string>
+    <string name="jd_comment5">頑張ったみたいですね。少しは認めてあげます。</string>
     
     <string name="chart_title">Arm-Wrestling Power(AWP)</string>
     <string name="chart_v_axis_legend">AWP</string>

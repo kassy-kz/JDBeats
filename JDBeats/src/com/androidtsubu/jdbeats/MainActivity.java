@@ -7,11 +7,13 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import android.R.integer;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -66,7 +68,7 @@ public class MainActivity extends Activity {
                         // Tweet設定
                         String sTweet = getTweetMessage();
                         showToast(sTweet);
-                        tweet(bitmap,sTweet);
+                         tweet(bitmap, sTweet);
                     }
                 }
             });
@@ -171,12 +173,12 @@ public class MainActivity extends Activity {
 
     private String getTweetMessage() {
         String sTweet;
-        
+
         /* DBから最新の計測値を取得 */
         JDBeatsDBHelper helper = new JDBeatsDBHelper(
                 MainActivity.this);
         Cursor cursor = helper
-                .query("SELECT jdbeats._id, jdbeats._value1 FROM jdbeats;",
+                .query("SELECT jdbeats._id, jdbeats.datetime, jdbeats._value1 FROM jdbeats;",
                         null);
 
         if (cursor.moveToFirst() == true) {
@@ -184,16 +186,64 @@ public class MainActivity extends Activity {
             do {
                 JDBeatsEntity entity = new JDBeatsEntity();
                 entity.setId(cursor.getInt(0));
-                entity.setValue1(cursor.getString(1));
+                entity.setDateTime(cursor.getLong(1));
+                entity.setValue1(cursor.getString(2));
                 lstEntity.add(entity);
             } while (cursor.moveToNext());
 
             Calendar clen = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat(
                     "yyyy/MM/dd HH:mm");
+            SimpleDateFormat db_sdf = new SimpleDateFormat("yyyyMMdd");
             String strGetTime = sdf.format(clen.getTime());
 
-            sTweet = strGetTime
+            // 兎月コメント
+            String sUtukiComment = new String();
+            String sUtukiComment1 = new String();
+            int thisValue1 = Integer.parseInt(lstEntity.get(lstEntity.size() - 1).getValue1());
+            int lastValue1 = Integer.parseInt(lstEntity.get(lstEntity.size() - 2).getValue1());
+            long thisDateTime = lstEntity.get(lstEntity.size() - 1).getDateTime();
+            long lastDataTime = lstEntity.get(lstEntity.size() - 2).getDateTime();
+
+            long one_date_time = 1000 * 60 * 60 * 24;
+            long diffDays = (thisDateTime - lastDataTime) / one_date_time;
+
+            if (diffDays >= 2) {
+                // 毎日測定していない場合
+                sUtukiComment1 = String.valueOf(getResourcesText(R.string.jd_comment4));
+            }
+
+            if (thisValue1 < lastValue1) {
+                // 前回の測定値から下がった場合
+                if (sUtukiComment.length() > 0) {
+                    sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment1))
+                            + sUtukiComment1;
+                } else {
+                    sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment1));
+                }
+            } else if (thisValue1 > lastValue1) {
+                // 前回の測定値から上がった場合
+                sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment2));
+            } else if (thisValue1 == lastValue1) {
+                // 測定値が2回連続で同じ値の場合
+                if (sUtukiComment.length() > 0) {
+                    sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment2))
+                            + sUtukiComment;
+                } else {
+                    sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment3));
+                }
+
+            }
+
+            if (thisValue1 > Integer.parseInt((String) getResourcesText(R.string.jdboss_value))) {
+                // 目標値を超えた場合
+                sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment5));
+            }
+
+            String sUtuki = String.valueOf(getResourcesText(R.string.jd_comment_header))
+                    + sUtukiComment + String.valueOf(getResourcesText(R.string.jd_comment_footer));
+
+            sTweet = sUtuki + strGetTime
                     + getResourcesText(R.string.header_miguse)
                     + getResourcesText(R.string.name_miguse)
                     + lstEntity.get(lstEntity.size() - 1)
