@@ -62,25 +62,8 @@ public class MainActivity extends Activity {
                     // 描画が正常終了したので、ビットマップが取得できる
                     // 描画が正常終了していない間(描画中や失敗時)はビットマップは取得できない(nullが返る)
                     Bitmap bitmap = fragment2.getGraph();
-                }
-            });
 
-            // グラフ描画が失敗した時にonDrawFailure()が呼び出される
-            fragment2.setOnDrawFailureListener(new OnDrawFailureListener() {
-                @Override
-                public void onDrawFailure() {
-                    // グラフ描画が失敗した場合の処理
-                }
-            });
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment2, "ChartFragment2").commit();
-        }
-
-        findViewById(R.id.button1).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
+                    if (bitmap != null) {
                         /* DBから最新の計測値を取得 */
                         JDBeatsDBHelper helper = new JDBeatsDBHelper(
                                 MainActivity.this);
@@ -107,11 +90,25 @@ public class MainActivity extends Activity {
                                     + lstEntity.get(lstEntity.size() - 1)
                                             .getValue1()
                                     + "AWP　/ 目標値　JD:394AWP /　参考値　残念女王:291AWP #jdbeats";
-                            showToast(mTweet);
-                            // tweet(bitmap);
+                        } else {
+                            mTweet = "";
                         }
+
+                        tweet(bitmap);
                     }
-                });
+                }
+            });
+
+            // グラフ描画が失敗した時にonDrawFailure()が呼び出される
+            fragment2.setOnDrawFailureListener(new OnDrawFailureListener() {
+                @Override
+                public void onDrawFailure() {
+                    // グラフ描画が失敗した場合の処理
+                }
+            });
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, fragment2, "ChartFragment2").commit();
+        }
     }
 
     protected void onResume() {
