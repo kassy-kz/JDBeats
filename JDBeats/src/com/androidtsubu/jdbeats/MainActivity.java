@@ -38,7 +38,6 @@ import com.androidtsubu.jdbeats.event.OnDrawSuccessListener;
  */
 public class MainActivity extends Activity {
     private Twitter mTwitter;
-    private String mTweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,47 +63,10 @@ public class MainActivity extends Activity {
                     Bitmap bitmap = fragment2.getGraph();
 
                     if (bitmap != null) {
-                        /* DBから最新の計測値を取得 */
-                        JDBeatsDBHelper helper = new JDBeatsDBHelper(
-                                MainActivity.this);
-                        Cursor cursor = helper
-                                .query("SELECT jdbeats._id, jdbeats._value1 FROM jdbeats;",
-                                        null);
-
-                        if (cursor.moveToFirst() == true) {
-                            List<JDBeatsEntity> lstEntity = new ArrayList<JDBeatsEntity>();
-                            do {
-                                JDBeatsEntity entity = new JDBeatsEntity();
-                                entity.setId(cursor.getInt(0));
-                                entity.setValue1(cursor.getString(1));
-                                lstEntity.add(entity);
-                            } while (cursor.moveToNext());
-
-                            Calendar clen = Calendar.getInstance();
-                            SimpleDateFormat sdf = new SimpleDateFormat(
-                                    "yyyy/MM/dd HH:mm");
-                            String strGetTime = sdf.format(clen.getTime());
-
-                            mTweet = strGetTime
-                                    + getResourcesText(R.string.header_miguse)
-                                    + getResourcesText(R.string.name_miguse)
-                                    + lstEntity.get(lstEntity.size() - 1)
-                                            .getValue1()
-                                    + getResourcesText(R.string.unit_awp)
-                                    + getResourcesText(R.string.header_jdboss)
-                                    + getResourcesText(R.string.name_jdboss)
-                                    + getResourcesText(R.string.jdboss_value)
-                                    + getResourcesText(R.string.unit_awp)
-                                    + getResourcesText(R.string.header_zannen)
-                                    + getResourcesText(R.string.name_zannen)
-                                    + getResourcesText(R.string.zannen_value)
-                                    + getResourcesText(R.string.unit_awp)
-                                    + getResourcesText(R.string.hash_tag);
-                        } else {
-                            mTweet = "";
-                        }
-                        showToast(mTweet);
-                         tweet(bitmap);
+                        // Tweet設定
+                        String sTweet = getTweetMessage();
+                        showToast(sTweet);
+                        tweet(bitmap,sTweet);
                     }
                 }
             });
@@ -162,12 +124,12 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void tweet(final Bitmap bmp) {
+    private void tweet(final Bitmap bmp, final String sTweet) {
         AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(String... params) {
                 try {
-                    StatusUpdate status = new StatusUpdate(mTweet);
+                    StatusUpdate status = new StatusUpdate(sTweet);
 
                     if (bmp == null) {
                         return false;
@@ -178,7 +140,7 @@ public class MainActivity extends Activity {
                     InputStream inputStream = new ByteArrayInputStream(
                             bos.toByteArray());
 
-                    status.media(mTweet, inputStream);
+                    status.media(sTweet, inputStream);
                     mTwitter.updateStatus(status);
                     return true;
                 } catch (TwitterException e) {
@@ -196,7 +158,7 @@ public class MainActivity extends Activity {
                 }
             }
         };
-        task.execute(mTweet);
+        task.execute(sTweet);
     }
 
     private void showToast(String text) {
@@ -205,5 +167,50 @@ public class MainActivity extends Activity {
 
     private CharSequence getResourcesText(int r_id) {
         return getResources().getText(r_id);
+    }
+
+    private String getTweetMessage() {
+        String sTweet;
+        
+        /* DBから最新の計測値を取得 */
+        JDBeatsDBHelper helper = new JDBeatsDBHelper(
+                MainActivity.this);
+        Cursor cursor = helper
+                .query("SELECT jdbeats._id, jdbeats._value1 FROM jdbeats;",
+                        null);
+
+        if (cursor.moveToFirst() == true) {
+            List<JDBeatsEntity> lstEntity = new ArrayList<JDBeatsEntity>();
+            do {
+                JDBeatsEntity entity = new JDBeatsEntity();
+                entity.setId(cursor.getInt(0));
+                entity.setValue1(cursor.getString(1));
+                lstEntity.add(entity);
+            } while (cursor.moveToNext());
+
+            Calendar clen = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat(
+                    "yyyy/MM/dd HH:mm");
+            String strGetTime = sdf.format(clen.getTime());
+
+            sTweet = strGetTime
+                    + getResourcesText(R.string.header_miguse)
+                    + getResourcesText(R.string.name_miguse)
+                    + lstEntity.get(lstEntity.size() - 1)
+                            .getValue1()
+                    + getResourcesText(R.string.unit_awp)
+                    + getResourcesText(R.string.header_jdboss)
+                    + getResourcesText(R.string.name_jdboss)
+                    + getResourcesText(R.string.jdboss_value)
+                    + getResourcesText(R.string.unit_awp)
+                    + getResourcesText(R.string.header_zannen)
+                    + getResourcesText(R.string.name_zannen)
+                    + getResourcesText(R.string.zannen_value)
+                    + getResourcesText(R.string.unit_awp)
+                    + getResourcesText(R.string.hash_tag);
+        } else {
+            sTweet = "";
+        }
+        return sTweet;
     }
 }
