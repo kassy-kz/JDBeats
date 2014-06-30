@@ -35,6 +35,8 @@ public class ChartFragment2 extends Fragment {
 	private boolean mIsChartDraw;
 	/** 表描画フラグ */
 	private boolean mIsTableDraw;
+	
+	private Bitmap mBitmap;
 
 	/** 描画成功通知 */
 	private OnDrawSuccessListener mSuccessListener;
@@ -68,9 +70,7 @@ public class ChartFragment2 extends Fragment {
 			if (mIsChartDraw && mIsTableDraw) {
 				mProgressBar.setVisibility(View.GONE);
 				mProgressBar.setEnabled(false);
-				if (mSuccessListener != null) {
-					mSuccessListener.onDrawSuccess();
-				}
+				createBitmapImage();
 			} else {
 				mProgressBar.setVisibility(View.VISIBLE);
 			}
@@ -126,23 +126,37 @@ public class ChartFragment2 extends Fragment {
 	 * @return キャプチャ画像(グラフ)
 	 */
 	public Bitmap getGraph() {
+		return mBitmap;
+	}
+	
+	private void createBitmapImage() {
 		// WebViewが生成されていない場合は画像取得不可
 		if (mWebView == null) {
-			return null;
+			return;
 		}
 
 		// 読み込み中の場合は画像取得をしない
 		if (mIsChartDraw == false || mIsTableDraw == false) {
-			return null;
+			return;
 		}
 
 		// WebViewの画像を取得する
-		Bitmap bitmap = Bitmap.createBitmap(
-				mWebView.getWidth(), mWebView.getHeight(), Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(bitmap);
-		mWebView.draw(canvas);
-		
-		return bitmap;
+		mWebView.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				mWebView.setDrawingCacheEnabled(true);
+				mWebView.buildDrawingCache();
+				mBitmap = Bitmap.createBitmap(
+						mWebView.getWidth(), mWebView.getHeight(), Bitmap.Config.ARGB_8888);
+				Canvas canvas = new Canvas(mBitmap);
+				mWebView.draw(canvas);
+				mWebView.setDrawingCacheEnabled(false);
+				if (mSuccessListener != null) {
+					mSuccessListener.onDrawSuccess();
+				}
+			}
+		}, 1000);
 	}
 	
 	private LoaderManager.LoaderCallbacks<String> mCallback = new LoaderManager.LoaderCallbacks<String>() {
