@@ -2,7 +2,19 @@
 <html lang="ja">
 	<head>
 		<meta charset="UTF-8">	
+		<style type="css">
+			body {
+				background: white;
+			}
+		</style>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script type="text/javascript">
 			google.load("visualization", "1", {packages:["corechart", "table"]});
-			google.setOnLoadCallback(function() {
+			google.setOnLoadCallback(drawChart);
+			
+			var data;
+			var chart;
+			var chart_options;
+			var table;
+			
+			function drawChart() {

@@ -75,7 +75,7 @@ public class JDBeatsHTMLFactory {
 	 */
 	private String createChartTitle() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("var chart_options = {\n");
+		sb.append("chart_options = {\n");
 		sb.append("title: '" + mResources.getString(R.string.chart_title) + "',\n");
 		sb.append("vAxis: {\n");
 		sb.append("title: '" + mResources.getString(R.string.chart_v_axis_legend)+ "',\n");
@@ -106,7 +106,7 @@ public class JDBeatsHTMLFactory {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FMT, Locale.JAPAN);
 
 		// データ生成
-		StringBuilder sb = new StringBuilder("var data = new google.visualization.arrayToDataTable([");
+		StringBuilder sb = new StringBuilder("data = new google.visualization.arrayToDataTable([");
 		//タイトル生成
 		sb.append("['" + mResources.getString(R.string.chart_h_axis_legend_1) + "', '" +
 				mResources.getString(R.string.chart_h_axis_legend_2) + "', '" +
