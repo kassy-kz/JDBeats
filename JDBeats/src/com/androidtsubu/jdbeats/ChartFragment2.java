@@ -219,8 +219,8 @@ public class ChartFragment2 extends Fragment {
 
 			Cursor cursor = helper.query(
 					"SELECT DISTINCT jdbeats._id, jdbeats.datetime, jdbeats._value1 FROM jdbeats, jdbeats tmp "
-					+ "WHERE jdbeats._id >= tmp._id GROUP BY jdbeats._id, jdbeats.datetime, jdbeats._value1 "
-					+ "HAVING COUNT(*) <= " + limit + " ORDER BY COUNT(*);"
+					+ "WHERE jdbeats._id <= tmp._id GROUP BY jdbeats._id, jdbeats.datetime, jdbeats._value1 "
+					+ "HAVING COUNT(*) <= " + limit + " ORDER BY COUNT(*) DESC;"
 					, null);
 			if (cursor == null) {
 				return "";

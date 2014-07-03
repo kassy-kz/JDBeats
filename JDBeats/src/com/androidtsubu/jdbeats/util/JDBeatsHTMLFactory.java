@@ -83,7 +83,12 @@ public class JDBeatsHTMLFactory {
 		sb.append("},\n");
 		sb.append("legend: {\n");
 		sb.append("position: 'top'\n");
-		sb.append("}\n");
+		sb.append("},\n");
+		sb.append("chartArea: {\n");
+		sb.append("left: 50,\n");
+		sb.append("width: '95%',\n");
+//		sb.append("height: '90%',\n");
+		sb.append("},\n");
 		sb.append("};\n");
 		
 		return sb.toString();
