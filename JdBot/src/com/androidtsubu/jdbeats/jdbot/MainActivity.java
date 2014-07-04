@@ -10,7 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.androidtsubu.jdbeats.jdbot.R;
+import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParseTwitterUtils;
+import com.parse.PushService;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -24,10 +27,10 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-        
-        
-//        PushService.setDefaultPushCallback(this, Twitter.class);
-//        ParseInstallation.getCurrentInstallation().saveInBackground();
+
+
+        PushService.setDefaultPushCallback(this, MainActivity.class);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
     @Override
