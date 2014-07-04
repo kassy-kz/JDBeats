@@ -15,7 +15,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.androidtsubu.jdbeats.jd.R;
 import android.app.Activity;
 import android.net.ParseException;
 import android.os.AsyncTask;
@@ -39,7 +38,7 @@ public class Twitter extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.twitter_layout);
 
-        // 認証するボタン
+        //認証するボタン
         btnAuth = (Button) findViewById(R.id.btnAuth);
         btnAuth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,26 +47,28 @@ public class Twitter extends Activity {
             }
         });
 
-        // 投稿するボタン
+        //投稿するボタン
         btnPost = (Button) findViewById(R.id.btnPost);
-        btnPost.setEnabled(ParseTwitterUtils.getTwitter().getAuthToken() != null);
+        btnPost.setEnabled( ParseTwitterUtils.getTwitter().getAuthToken() != null );
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ParseTwitterUtils.getTwitter().getAuthToken() != null) {
+                if( ParseTwitterUtils.getTwitter().getAuthToken() != null ){
                     PostTask task = new PostTask();
                     task.execute();
-                } else {
+                } else{
                     Toast.makeText(getApplicationContext(), "認証してない", Toast.LENGTH_LONG).show();
                 }
+
             }
         });
     }
 
-    // Twitterにログインする
+    //Twitterにログインする
     public void loginTwitter() {
         ParseTwitterUtils.logIn(this, new LogInCallback() {
-            public void done(ParseUser user, ParseException err) {
+            @Override
+            public void done(ParseUser user, com.parse.ParseException err) {
                 if (user == null) {
                     Toast.makeText(getApplicationContext(), "NG", Toast.LENGTH_LONG).show();
                 } else {
@@ -75,16 +76,10 @@ public class Twitter extends Activity {
                     btnPost.setEnabled(true);
                 }
             }
-
-            @Override
-            public void done(ParseUser user, com.parse.ParseException e) {
-                // TODO Auto-generated method stub
-                
-            }
         });
     }
 
-    // 「テスト」を投稿する
+    //「テスト」を投稿する
     class PostTask extends AsyncTask<String, Integer, Integer> {
 
         @Override
@@ -92,25 +87,25 @@ public class Twitter extends Activity {
             HttpClient client = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost("https://api.twitter.com/1.1/statuses/update.json");
             List<NameValuePair> postParams = new ArrayList<NameValuePair>();
-            HttpResponse response = null;
+            org.apache.http.HttpResponse response = null;
             try {
                 postParams.add(new BasicNameValuePair("status", "テスト"));
                 httpPost.setEntity(new UrlEncodedFormEntity(postParams, "UTF-8"));
                 ParseTwitterUtils.getTwitter().signRequest(httpPost);
-                response = (HttpResponse) client.execute(httpPost);
+                response = client.execute(httpPost);
             } catch (ClientProtocolException e) {
             } catch (UnsupportedEncodingException e) {
             } catch (IOException e) {
             }
-            return ((org.apache.http.HttpResponse) response).getStatusLine().getStatusCode();
+            return response.getStatusLine().getStatusCode();
         }
 
         @Override
         protected void onPostExecute(Integer statusCode) {
             super.onPostExecute(statusCode);
-            if (statusCode == HttpURLConnection.HTTP_OK) {
+            if( statusCode == HttpURLConnection.HTTP_OK ){
                 Toast.makeText(getApplicationContext(), "投稿完了", Toast.LENGTH_LONG).show();
-            } else {
+            }else{
                 Toast.makeText(getApplicationContext(), "失敗", Toast.LENGTH_LONG).show();
             }
         }
