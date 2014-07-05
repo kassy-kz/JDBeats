@@ -135,13 +135,13 @@ public class Twitter extends Activity {
     private void saveYellMessage() {
         String edit1 = mEditText1.getText().toString();
         Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_1, edit1);
-        String edit2 = mEditText1.getText().toString();
+        String edit2 = mEditText2.getText().toString();
         Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_2, edit2);
-        String edit3 = mEditText1.getText().toString();
+        String edit3 = mEditText3.getText().toString();
         Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_3, edit3);
-        String edit4 = mEditText1.getText().toString();
+        String edit4 = mEditText4.getText().toString();
         Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_4, edit4);
-        String edit5 = mEditText1.getText().toString();
+        String edit5 = mEditText5.getText().toString();
         Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_5, edit5);
     }
     
