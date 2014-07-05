@@ -18,7 +18,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
-import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
-import com.parse.signpost.http.HttpResponse;
 
 public class Twitter extends Activity {
 
