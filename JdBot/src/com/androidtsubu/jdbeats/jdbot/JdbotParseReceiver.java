@@ -18,7 +18,7 @@ public class JdbotParseReceiver extends BroadcastReceiver {
             JSONObject json = new JSONObject(data);
             
             int pushType = Integer.parseInt(json.getString("msg")); //通知がするJSONはmsgでよい？
-            String msg = Utils.getPostMessage(pushType);
+            String msg = Utils.getPostMessage(context, pushType);
             if (msg != null && msg.length() > 0) {
                 PostTwitterTask task = new PostTwitterTask(context);
                 task.execute(msg);
