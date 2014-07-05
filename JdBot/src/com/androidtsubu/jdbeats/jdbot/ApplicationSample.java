@@ -12,14 +12,14 @@ public class ApplicationSample extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        // Parse‚Ì‰Šú‰»
+        // Parseã®åˆæœŸåŒ–
         Parse.initialize(this, "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP",
                 "mLNQM1KQocz82N2InlWvmoeZaiqI3kcChflLbbDO");
         
         PushService.setDefaultPushCallback(this, Twitter.class);
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
-        // Twitter‚ğ—˜—p
+        // Twitterã‚’åˆ©ç”¨
         ParseTwitterUtils.initialize("XstXUMNnzhyeVOmd6GGjw",
                 "yNsZx6d1L9q6N8pRCjWpv5N3blWSNTCWnGMwyLYCmw");
 
