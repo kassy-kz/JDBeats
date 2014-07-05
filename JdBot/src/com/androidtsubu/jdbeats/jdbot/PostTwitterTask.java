@@ -45,11 +45,9 @@ public class PostTwitterTask extends AsyncTask<String, Integer, Integer> {
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
         org.apache.http.HttpResponse response = null;
         try {
-            
             if (params.length <= 0) {
                 return HttpURLConnection.HTTP_INTERNAL_ERROR;
             }
-            
             postParams.add(new BasicNameValuePair("status", params[0]));
             httpPost.setEntity(new UrlEncodedFormEntity(postParams, "UTF-8"));
             ParseTwitterUtils.getTwitter().signRequest(httpPost);
@@ -69,9 +67,9 @@ public class PostTwitterTask extends AsyncTask<String, Integer, Integer> {
     protected void onPostExecute(Integer statusCode) {
         super.onPostExecute(statusCode);
         if (statusCode == HttpURLConnection.HTTP_OK) {
-            Toast.makeText(mContext, "���e����", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "投稿完了", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(mContext, "���s", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "投稿失敗", Toast.LENGTH_LONG).show();
         }
     }
 }
