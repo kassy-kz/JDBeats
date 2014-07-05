@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -32,6 +33,11 @@ public class Twitter extends Activity {
 
     private Button btnAuth = null;
     private Button btnPost = null;
+    private EditText mEditText1;
+    private EditText mEditText2;
+    private EditText mEditText3;
+    private EditText mEditText4;
+    private EditText mEditText5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,13 @@ public class Twitter extends Activity {
 
             }
         });
+        
+        // EditTextアイテムの設定
+        mEditText1 = (EditText) findViewById(R.id.edit1);
+        mEditText2 = (EditText) findViewById(R.id.edit2);
+        mEditText3 = (EditText) findViewById(R.id.edit3);
+        mEditText4 = (EditText) findViewById(R.id.edit4);
+        mEditText5 = (EditText) findViewById(R.id.edit5);
     }
 
     // Twitterにログインする
@@ -115,4 +128,55 @@ public class Twitter extends Activity {
             }
         }
     }
+    
+    /**
+     * EditTextの文言を保存する
+     */
+    private void saveYellMessage() {
+        String edit1 = mEditText1.getText().toString();
+        Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_1, edit1);
+        String edit2 = mEditText1.getText().toString();
+        Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_2, edit2);
+        String edit3 = mEditText1.getText().toString();
+        Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_3, edit3);
+        String edit4 = mEditText1.getText().toString();
+        Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_4, edit4);
+        String edit5 = mEditText1.getText().toString();
+        Utils.saveToSharedPref(this, Utils.PUSH_MESSAGE_5, edit5);
+    }
+    
+    /**
+     * EditTextに文言を設定する
+     */
+    private void loadYellMessage() {
+        String str1 = Utils.loadFromSharedPref(this, Utils.PUSH_MESSAGE_1);
+        mEditText1.setText(str1);
+        String str2 = Utils.loadFromSharedPref(this, Utils.PUSH_MESSAGE_2);
+        mEditText2.setText(str2);
+        String str3 = Utils.loadFromSharedPref(this, Utils.PUSH_MESSAGE_3);
+        mEditText3.setText(str3);
+        String str4 = Utils.loadFromSharedPref(this, Utils.PUSH_MESSAGE_4);
+        mEditText4.setText(str4);
+        String str5 = Utils.loadFromSharedPref(this, Utils.PUSH_MESSAGE_5);
+        mEditText5.setText(str5);
+    }
+    
+    /**
+     * onResume
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadYellMessage();
+    }
+    
+    /**
+     * onPause
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveYellMessage();
+    }
 }
+
