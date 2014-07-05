@@ -17,10 +17,12 @@ public class JdbotParseReceiver extends BroadcastReceiver {
             String data = extra.getString("com.parse.Data");
             JSONObject json = new JSONObject(data);
             
-            int pushType = Integer.parseInt(json.getString("msg"));
+            int pushType = Integer.parseInt(json.getString("msg")); //通知がするJSONはmsgでよい？
             String msg = Utils.getPostMessage(pushType);
-            PostTwitterTask task = new PostTwitterTask(context);
-            task.execute(msg);
+            if (msg != null && msg.length() > 0) {
+                PostTwitterTask task = new PostTwitterTask(context);
+                task.execute(msg);
+            }
         } catch (JSONException e) {
             
         } catch (NumberFormatException e) {
