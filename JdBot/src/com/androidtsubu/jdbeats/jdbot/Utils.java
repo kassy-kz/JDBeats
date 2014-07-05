@@ -23,13 +23,45 @@ public class Utils {
     public static final int PUSH_RESULT_3 = 3;
     public static final int PUSH_RESULT_4 = 4;
     public static final int PUSH_RESULT_5 = 5;
+    
+    // 投稿のヘッダとフッタ
+    private static final String POST_HEADER = "@miguse ";
+    private static final String POST_FOOTER = "";
+
 
     /**
-     * Twitterに投稿する文言を取得する
-     * @return
+     * Twitterに投げるべき文言を返すメソッド
+     * @param context コンテキスト
+     * @param push_type 番号 PUSH_RESULT_1 〜　5をいれること
+     * @return 投稿文字列
      */
-    public static String getPostMessage(int push_type) {
-        return push_type + " のメッセージです（スタブ）";
+    public static String getPostMessage(Context context, int push_type) {
+        String postBody;
+        switch (push_type) {
+            
+            case PUSH_RESULT_1:
+                postBody = loadFromSharedPref(context, PUSH_MESSAGE_1);
+                break;
+            case PUSH_RESULT_2:
+                postBody = loadFromSharedPref(context, PUSH_MESSAGE_2);
+                break;
+            case PUSH_RESULT_3:
+                postBody = loadFromSharedPref(context, PUSH_MESSAGE_3);
+                break;
+            case PUSH_RESULT_4:
+                postBody = loadFromSharedPref(context, PUSH_MESSAGE_4);
+                break;
+            case PUSH_RESULT_5:
+                postBody = loadFromSharedPref(context, PUSH_MESSAGE_5);
+                break;
+
+            default:
+                postBody = "エラーです";
+                break;
+        }
+        
+        // ヘッダ、ボディ、フッタの結合を返す。
+        return POST_HEADER + postBody + POST_FOOTER;
     }    
     
     
