@@ -4,7 +4,9 @@ package com.androidtsubu.jdbeats.jdbot;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -38,7 +40,7 @@ public class Twitter extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.twitter_layout);
 
-        //認証するボタン
+        // 認証するボタン
         btnAuth = (Button) findViewById(R.id.btnAuth);
         btnAuth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,16 +49,16 @@ public class Twitter extends Activity {
             }
         });
 
-        //投稿するボタン
+        // 投稿するボタン
         btnPost = (Button) findViewById(R.id.btnPost);
-        btnPost.setEnabled( ParseTwitterUtils.getTwitter().getAuthToken() != null );
+        btnPost.setEnabled(ParseTwitterUtils.getTwitter().getAuthToken() != null);
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( ParseTwitterUtils.getTwitter().getAuthToken() != null ){
+                if (ParseTwitterUtils.getTwitter().getAuthToken() != null) {
                     PostTask task = new PostTask();
                     task.execute();
-                } else{
+                } else {
                     Toast.makeText(getApplicationContext(), "認証してない", Toast.LENGTH_LONG).show();
                 }
 
@@ -64,7 +66,7 @@ public class Twitter extends Activity {
         });
     }
 
-    //Twitterにログインする
+    // Twitterにログインする
     public void loginTwitter() {
         ParseTwitterUtils.logIn(this, new LogInCallback() {
             @Override
@@ -79,7 +81,7 @@ public class Twitter extends Activity {
         });
     }
 
-    //「テスト」を投稿する
+    // 「テスト」を投稿する
     class PostTask extends AsyncTask<String, Integer, Integer> {
 
         @Override
@@ -89,7 +91,12 @@ public class Twitter extends Activity {
             List<NameValuePair> postParams = new ArrayList<NameValuePair>();
             org.apache.http.HttpResponse response = null;
             try {
-                postParams.add(new BasicNameValuePair("status", "テスト"));
+                Calendar clen = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat(
+                        "HH:mm");
+                String strGetTime = sdf.format(clen.getTime());
+                strGetTime = strGetTime + "てすとだぉ♪";
+                postParams.add(new BasicNameValuePair("status",strGetTime ));
                 httpPost.setEntity(new UrlEncodedFormEntity(postParams, "UTF-8"));
                 ParseTwitterUtils.getTwitter().signRequest(httpPost);
                 response = client.execute(httpPost);
@@ -103,9 +110,9 @@ public class Twitter extends Activity {
         @Override
         protected void onPostExecute(Integer statusCode) {
             super.onPostExecute(statusCode);
-            if( statusCode == HttpURLConnection.HTTP_OK ){
+            if (statusCode == HttpURLConnection.HTTP_OK) {
                 Toast.makeText(getApplicationContext(), "投稿完了", Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), "失敗", Toast.LENGTH_LONG).show();
             }
         }
