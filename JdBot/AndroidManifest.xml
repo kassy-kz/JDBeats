@@ -60,11 +60,12 @@
                 <category android:name="com.androidtsubu.jdbeats.jdbot" />
             </intent-filter>
         </receiver>
-        
-        <receiver android:name="com.androidtsubu.jdbeats.jdbot.JdbotParseReceiver" android:exported="false">
-        	<intent-filter>
-	            <action android:name="com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS" />
-        	</intent-filter>
+        <receiver
+            android:name="com.androidtsubu.jdbeats.jdbot.JdbotParseReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS" />
+            </intent-filter>
         </receiver>
     </application>
 
