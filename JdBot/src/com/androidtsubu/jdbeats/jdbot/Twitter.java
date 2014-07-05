@@ -18,7 +18,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
-import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
-import com.parse.signpost.http.HttpResponse;
 
 public class Twitter extends Activity {
 
@@ -40,7 +38,7 @@ public class Twitter extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.twitter_layout);
 
-        // ”FØ‚·‚éƒ{ƒ^ƒ“
+        // èªè¨¼ã™ã‚‹ãƒœã‚¿ãƒ³
         btnAuth = (Button) findViewById(R.id.btnAuth);
         btnAuth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +47,7 @@ public class Twitter extends Activity {
             }
         });
 
-        // “Še‚·‚éƒ{ƒ^ƒ“
+        // æŠ•ç¨¿ã™ã‚‹ãƒœã‚¿ãƒ³
         btnPost = (Button) findViewById(R.id.btnPost);
         btnPost.setEnabled(ParseTwitterUtils.getTwitter().getAuthToken() != null);
         btnPost.setOnClickListener(new View.OnClickListener() {
@@ -59,14 +57,14 @@ public class Twitter extends Activity {
                     PostTask task = new PostTask();
                     task.execute();
                 } else {
-                    Toast.makeText(getApplicationContext(), "”FØ‚µ‚Ä‚È‚¢", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "èªè¨¼ã—ã¦ãªã„", Toast.LENGTH_LONG).show();
                 }
 
             }
         });
     }
 
-    // Twitter‚ÉƒƒOƒCƒ“‚·‚é
+    // Twitterã«ãƒ­ã‚°ã‚¤ãƒ³ã™ã‚‹
     public void loginTwitter() {
         ParseTwitterUtils.logIn(this, new LogInCallback() {
             @Override
@@ -74,14 +72,14 @@ public class Twitter extends Activity {
                 if (user == null) {
                     Toast.makeText(getApplicationContext(), "NG", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "@OK", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "ã€€OK", Toast.LENGTH_LONG).show();
                     btnPost.setEnabled(true);
                 }
             }
         });
     }
 
-    // uƒeƒXƒgv‚ğ“Še‚·‚é
+    // ã€Œãƒ†ã‚¹ãƒˆã€ã‚’æŠ•ç¨¿ã™ã‚‹
     class PostTask extends AsyncTask<String, Integer, Integer> {
 
         @Override
@@ -95,7 +93,7 @@ public class Twitter extends Activity {
                 SimpleDateFormat sdf = new SimpleDateFormat(
                         "HH:mm");
                 String strGetTime = sdf.format(clen.getTime());
-                strGetTime = strGetTime + "‚Ä‚·‚Æ‚¾‚§ô";
+                strGetTime = strGetTime + "ã¦ã™ã¨ã ã‰â™ª";
                 postParams.add(new BasicNameValuePair("status",strGetTime ));
                 httpPost.setEntity(new UrlEncodedFormEntity(postParams, "UTF-8"));
                 ParseTwitterUtils.getTwitter().signRequest(httpPost);
@@ -111,9 +109,9 @@ public class Twitter extends Activity {
         protected void onPostExecute(Integer statusCode) {
             super.onPostExecute(statusCode);
             if (statusCode == HttpURLConnection.HTTP_OK) {
-                Toast.makeText(getApplicationContext(), "“ŠeŠ®—¹", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "æŠ•ç¨¿å®Œäº†", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getApplicationContext(), "¸”s", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "å¤±æ•—", Toast.LENGTH_LONG).show();
             }
         }
     }
