@@ -18,7 +18,9 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-public class JDBeatsParse {
+import android.os.AsyncTask;
+
+public class JDBeatsParse extends AsyncTask<String,Integer, String>{
 
     protected String url;
     protected HttpClient httpClient;
@@ -33,31 +35,51 @@ public class JDBeatsParse {
         this.params.add(new BasicNameValuePair(key, value));
     }
 
-    public String doPost() throws UnsupportedEncodingException, ClientProtocolException,
-            IOException {
-        UrlEncodedFormEntity entry = new UrlEncodedFormEntity(this.params);
+    @Override
+    protected String doInBackground(String... params) {
+        UrlEncodedFormEntity entry = null;
+        try {
+            entry = new UrlEncodedFormEntity(this.params);
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         HttpPost httpPost = new HttpPost(this.url);
 
         httpPost.setEntity(entry);
         httpPost.addHeader("X-Parse-Application-Id", "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP");
         httpPost.addHeader("X-Parse-REST-API-Key", "ZDhnOI1v8GRPjq6rYzLdWTkW7NZoyFGCNl0SYBY2");
         httpPost.addHeader("Content-Type", "application/json");
-
-        return this.doHttpRequest(httpPost);
-    }
-
-    protected String doHttpRequest(HttpUriRequest request) throws ClientProtocolException,
-            IOException {
+        
         String responseText = new String();
-        HttpResponse response = this.httpClient.execute(request);
+        HttpResponse response = null;
+        try {
+            response = this.httpClient.execute(httpPost);
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        response.getEntity().writeTo(byteArrayOutputStream);
+        try {
+            response.getEntity().writeTo(byteArrayOutputStream);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             responseText = byteArrayOutputStream.toString();
         }
-        byteArrayOutputStream.close();
+        try {
+            byteArrayOutputStream.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         return responseText;
     }

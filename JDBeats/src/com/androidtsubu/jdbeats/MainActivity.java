@@ -3,21 +3,15 @@ package com.androidtsubu.jdbeats;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
 
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import android.R.integer;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -78,18 +72,8 @@ public class MainActivity extends Activity {
                         JDBeatsParse jdParse = new JDBeatsParse("https://api.parse.com/1/push");
                         jdParse.addParam("action", "com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS");
                         jdParse.addParam("msg","1");
-                        try {
-                            showToast(jdParse.doPost());
-                        } catch (UnsupportedEncodingException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (ClientProtocolException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+
+                        jdParse.execute();
                     }
                 }
             });
