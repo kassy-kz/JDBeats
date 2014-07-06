@@ -31,6 +31,10 @@ import com.androidtsubu.jdbeats.db.JDBeatsEntity;
 import com.androidtsubu.jdbeats.event.OnDrawFailureListener;
 import com.androidtsubu.jdbeats.event.OnDrawSuccessListener;
 import com.androidtsubu.jdbeats.util.JDBeatsParse;
+import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
 
 /**
  * Twitter投稿用Activity
@@ -68,12 +72,20 @@ public class MainActivity extends Activity {
                         String sTweet = getTweetMessage();
                         showToast(sTweet);
 //                      tweet(bitmap, sTweet);
-                        // ParseへPushをする
-                        JDBeatsParse jdParse = new JDBeatsParse("https://api.parse.com/1/push");
-                        jdParse.addParam("action", "com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS");
-                        jdParse.addParam("msg","1");
 
-                        jdParse.execute();
+                        // ParseへPushをする
+                        Parse.initialize(getApplicationContext(), "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP", "mLNQM1KQocz82N2InlWvmoeZaiqI3kcChflLbbDO");
+                        ParsePush push = new ParsePush();
+                        push.setChannel("AWP");  
+                        push.setMessage("test from android application.");
+                        push.sendInBackground();
+
+                        
+//                        JDBeatsParse jdParse = new JDBeatsParse("https://api.parse.com/1/push");
+//                        jdParse.addParam("action", "com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS");
+//                        jdParse.addParam("msg","1");
+//
+//                        jdParse.execute();
                     }
                 }
             });

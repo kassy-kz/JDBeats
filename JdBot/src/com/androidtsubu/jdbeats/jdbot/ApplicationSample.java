@@ -23,5 +23,7 @@ public class ApplicationSample extends Application {
         ParseTwitterUtils.initialize("XstXUMNnzhyeVOmd6GGjw",
                 "yNsZx6d1L9q6N8pRCjWpv5N3blWSNTCWnGMwyLYCmw");
 
+        // Push通知のsubscribe
+        PushService.subscribe(this, "AWP", Twitter.class);
     }
 }
