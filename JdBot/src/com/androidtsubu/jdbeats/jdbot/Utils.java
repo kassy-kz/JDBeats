@@ -1,8 +1,13 @@
 package com.androidtsubu.jdbeats.jdbot;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.support.v4.app.NotificationCompat;
 
 public class Utils {
 
@@ -89,4 +94,23 @@ public class Utils {
         String itemValue  = shPref.getString(itemName, "");
         return itemValue;
     }
+    
+    /**
+     * ノティフィケーションを表示する
+     * @param con
+     * @param iconResource
+     * @param titleText
+     * @param contentText
+     */
+    public static void showNotification(Context con, int iconResource, String titleText, String contentText) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(con)
+                .setSmallIcon(iconResource)
+                .setContentTitle(titleText)
+                .setContentText(contentText);
+        NotificationManager mNotificationManager =
+            (NotificationManager) con.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1, mBuilder.build());    
+    }
+
 }

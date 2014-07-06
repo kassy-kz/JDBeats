@@ -68,6 +68,7 @@ public class PostTwitterTask extends AsyncTask<String, Integer, Integer> {
         super.onPostExecute(statusCode);
         if (statusCode == HttpURLConnection.HTTP_OK) {
             Toast.makeText(mContext, "投稿完了", Toast.LENGTH_LONG).show();
+            Utils.showNotification(mContext, R.drawable.ic_launcher, "応援bot", "応援メッセージを投稿しました");
         } else {
             Toast.makeText(mContext, "投稿失敗", Toast.LENGTH_LONG).show();
         }
