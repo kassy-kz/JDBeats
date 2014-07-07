@@ -12,6 +12,8 @@ public class JdbotParseReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        String channel = intent.getExtras().getString("com.parse.Channel");
+        if (channel.equals("AWP")) {
         try {
             Bundle extra = intent.getExtras();
             String data = extra.getString("com.parse.Data");
@@ -28,6 +30,6 @@ public class JdbotParseReceiver extends BroadcastReceiver {
         } catch (NumberFormatException e) {
             
         }
+      }
     }
-
 }

@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -30,11 +33,8 @@ import com.androidtsubu.jdbeats.db.JDBeatsDBHelper;
 import com.androidtsubu.jdbeats.db.JDBeatsEntity;
 import com.androidtsubu.jdbeats.event.OnDrawFailureListener;
 import com.androidtsubu.jdbeats.event.OnDrawSuccessListener;
-import com.androidtsubu.jdbeats.util.JDBeatsParse;
 import com.parse.Parse;
-import com.parse.ParseInstallation;
 import com.parse.ParsePush;
-import com.parse.ParseQuery;
 
 /**
  * Twitter投稿用Activity
@@ -73,19 +73,29 @@ public class MainActivity extends Activity {
                         showToast(sTweet);
 //                      tweet(bitmap, sTweet);
 
+                        // ParseへPushするJSONObjectを作成
+                        JSONObject parseJsonData = new JSONObject();
+                        try {
+                            parseJsonData.put("action", "com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS");
+                        } catch (JSONException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        try {
+                            parseJsonData.put("msg","5");
+                        } catch (JSONException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        
                         // ParseへPushをする
                         Parse.initialize(getApplicationContext(), "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP", "mLNQM1KQocz82N2InlWvmoeZaiqI3kcChflLbbDO");
                         ParsePush push = new ParsePush();
                         push.setChannel("AWP");  
-                        push.setMessage("test from android application.");
+//                        push.setMessage("test from android application.");
+                        push.setData(parseJsonData);
                         push.sendInBackground();
 
-                        
-//                        JDBeatsParse jdParse = new JDBeatsParse("https://api.parse.com/1/push");
-//                        jdParse.addParam("action", "com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS");
-//                        jdParse.addParam("msg","1");
-//
-//                        jdParse.execute();
                     }
                 }
             });
@@ -260,7 +270,8 @@ public class MainActivity extends Activity {
             String sUtuki = String.valueOf(getResourcesText(R.string.jd_comment_header))
                     + sUtukiComment + String.valueOf(getResourcesText(R.string.jd_comment_footer));
 
-            sTweet = sUtuki + strGetTime
+//            sTweet = sUtuki + strGetTime
+                    sTweet = strGetTime
                     + getResourcesText(R.string.header_miguse)
                     + getResourcesText(R.string.name_miguse)
                     + lstEntity.get(lstEntity.size() - 1)
