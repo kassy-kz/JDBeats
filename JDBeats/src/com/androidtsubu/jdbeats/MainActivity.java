@@ -43,6 +43,15 @@ import com.parse.ParsePush;
  */
 public class MainActivity extends Activity {
     private Twitter mTwitter;
+    private String oenStatus;
+
+    private String getOenStatus() {
+        return oenStatus;
+    }
+
+    private void setOenStatus(String oenStatus) {
+        this.oenStatus = oenStatus;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +80,7 @@ public class MainActivity extends Activity {
                         // Tweet設定
                         String sTweet = getTweetMessage();
                         showToast(sTweet);
-//                      tweet(bitmap, sTweet);
+                        tweet(bitmap, sTweet);
 
                         // ParseへPushするJSONObjectを作成
                         JSONObject parseJsonData = new JSONObject();
@@ -82,7 +91,7 @@ public class MainActivity extends Activity {
                             e.printStackTrace();
                         }
                         try {
-                            parseJsonData.put("msg","5");
+                            parseJsonData.put("msg",getOenStatus());
                         } catch (JSONException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -224,9 +233,7 @@ public class MainActivity extends Activity {
             SimpleDateFormat db_sdf = new SimpleDateFormat("yyyyMMdd");
             String strGetTime = sdf.format(clen.getTime());
 
-            // 兎月コメント
-            String sUtukiComment = new String();
-            String sUtukiComment1 = new String();
+            // 応援コメント
             int thisValue1 = Integer.parseInt(lstEntity.get(lstEntity.size() - 1).getValue1());
             int lastValue1 = Integer.parseInt(lstEntity.get(lstEntity.size() - 2).getValue1());
             long thisDateTime = lstEntity.get(lstEntity.size() - 1).getDateTime();
@@ -237,41 +244,26 @@ public class MainActivity extends Activity {
 
             if (diffDays >= 2) {
                 // 毎日測定していない場合
-                sUtukiComment1 = String.valueOf(getResourcesText(R.string.jd_comment4));
+                setOenStatus("4");
             }
 
             if (thisValue1 < lastValue1) {
                 // 前回の測定値から下がった場合
-                if (sUtukiComment.length() > 0) {
-                    sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment1))
-                            + sUtukiComment1;
-                } else {
-                    sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment1));
-                }
+                setOenStatus("1");
             } else if (thisValue1 > lastValue1) {
                 // 前回の測定値から上がった場合
-                sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment2));
-            } else if (thisValue1 == lastValue1) {
+                setOenStatus("2");
+            } else if (thisValue1 == lastValue1 ) {
                 // 測定値が2回連続で同じ値の場合
-                if (sUtukiComment.length() > 0) {
-                    sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment2))
-                            + sUtukiComment;
-                } else {
-                    sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment3));
-                }
-
+                setOenStatus("3");
             }
 
             if (thisValue1 > Integer.parseInt((String) getResourcesText(R.string.jdboss_value))) {
                 // 目標値を超えた場合
-                sUtukiComment = String.valueOf(getResourcesText(R.string.jd_comment5));
+                setOenStatus("5");
             }
 
-            String sUtuki = String.valueOf(getResourcesText(R.string.jd_comment_header))
-                    + sUtukiComment + String.valueOf(getResourcesText(R.string.jd_comment_footer));
-
-//            sTweet = sUtuki + strGetTime
-                    sTweet = strGetTime
+            sTweet = strGetTime
                     + getResourcesText(R.string.header_miguse)
                     + getResourcesText(R.string.name_miguse)
                     + lstEntity.get(lstEntity.size() - 1)
