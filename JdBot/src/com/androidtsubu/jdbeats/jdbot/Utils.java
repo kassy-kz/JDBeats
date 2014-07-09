@@ -31,7 +31,7 @@ public class Utils {
     
     // 投稿のヘッダとフッタ
     private static final String POST_HEADER = "@miguse ";
-    private static final String POST_FOOTER = "";
+    private static final String POST_FOOTER = " #jdbeats";
 
 
     /**
