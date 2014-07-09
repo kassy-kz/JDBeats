@@ -277,7 +277,7 @@ public class MainActivity extends Activity {
                     + getResourcesText(R.string.name_zannen)
                     + getResourcesText(R.string.zannen_value)
                     + getResourcesText(R.string.unit_awp)
-                    + getResourcesText(R.string.hash_tag);
+                    + " " + getResourcesText(R.string.hash_tag);
         } else {
             sTweet = "";
         }
