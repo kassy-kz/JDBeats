@@ -85,23 +85,26 @@ public class MainActivity extends Activity {
                         // ParseへPushするJSONObjectを作成
                         JSONObject parseJsonData = new JSONObject();
                         try {
-                            parseJsonData.put("action", "com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS");
+                            parseJsonData.put("action",
+                                    "com.androidtsubu.jdbeats.jdbot.UPDATE_STATUS");
                         } catch (JSONException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                         try {
-                            parseJsonData.put("msg",getOenStatus());
+                            parseJsonData.put("msg", getOenStatus());
                         } catch (JSONException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
-                        
+
                         // ParseへPushをする
-                        Parse.initialize(getApplicationContext(), "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP", "mLNQM1KQocz82N2InlWvmoeZaiqI3kcChflLbbDO");
+                        Parse.initialize(getApplicationContext(),
+                                "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP",
+                                "mLNQM1KQocz82N2InlWvmoeZaiqI3kcChflLbbDO");
                         ParsePush push = new ParsePush();
-                        push.setChannel("AWP");  
-//                        push.setMessage("test from android application.");
+                        push.setChannel("AWP");
+                        // push.setMessage("test from android application.");
                         push.setData(parseJsonData);
                         push.sendInBackground();
 
@@ -253,7 +256,7 @@ public class MainActivity extends Activity {
             } else if (thisValue1 > lastValue1) {
                 // 前回の測定値から上がった場合
                 setOenStatus("2");
-            } else if (thisValue1 == lastValue1 ) {
+            } else if (thisValue1 == lastValue1) {
                 // 測定値が2回連続で同じ値の場合
                 setOenStatus("3");
             }
