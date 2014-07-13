@@ -9,21 +9,21 @@ import com.parse.ParseTwitterUtils;
 import com.parse.PushService;
 
 public class ApplicationSample extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        // Parseの初期化
-        Parse.initialize(this, "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP",
-                "mLNQM1KQocz82N2InlWvmoeZaiqI3kcChflLbbDO");
-        
-        PushService.setDefaultPushCallback(this, Twitter.class);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    // Parseの初期化
+    Parse.initialize(this, "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP",
+        "mLNQM1KQocz82N2InlWvmoeZaiqI3kcChflLbbDO");
 
-        // Twitterを利用
-        ParseTwitterUtils.initialize("XstXUMNnzhyeVOmd6GGjw",
-                "yNsZx6d1L9q6N8pRCjWpv5N3blWSNTCWnGMwyLYCmw");
+    PushService.setDefaultPushCallback(this, Twitter.class);
+    ParseInstallation.getCurrentInstallation().saveInBackground();
 
-        // Push通知のsubscribe
-        PushService.subscribe(this, "AWP", Twitter.class);
-    }
+    // Twitterを利用
+    ParseTwitterUtils.initialize("XstXUMNnzhyeVOmd6GGjw",
+        "yNsZx6d1L9q6N8pRCjWpv5N3blWSNTCWnGMwyLYCmw");
+
+    // Push通知のsubscribe
+    PushService.subscribe(this, "AWP", Twitter.class);
+  }
 }

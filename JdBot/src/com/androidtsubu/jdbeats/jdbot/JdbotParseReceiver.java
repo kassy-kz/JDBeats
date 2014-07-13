@@ -11,26 +11,26 @@ import android.os.Bundle;
 
 public class JdbotParseReceiver extends BroadcastReceiver {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        String channel = intent.getExtras().getString("com.parse.Channel");
-        if ("AWP".equals(channel)) {
-            try {
-                Bundle extra = intent.getExtras();
-                String data = extra.getString("com.parse.Data");
-                JSONObject json = new JSONObject(data);
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    String channel = intent.getExtras().getString("com.parse.Channel");
+    if ("AWP".equals(channel)) {
+      try {
+        Bundle extra = intent.getExtras();
+        String data = extra.getString("com.parse.Data");
+        JSONObject json = new JSONObject(data);
 
-                int pushType = Integer.parseInt(json.getString("msg")); // 通知がするJSONはmsgでよい？
-                String msg = Utils.getPostMessage(context, pushType);
-                if (msg != null && msg.length() > 0) {
-                    PostTwitterTask task = new PostTwitterTask(context);
-                    task.execute(msg);
-                }
-            } catch (JSONException e) {
-
-            } catch (NumberFormatException e) {
-
-            }
+        int pushType = Integer.parseInt(json.getString("msg")); // 通知がするJSONはmsgでよい？
+        String msg = Utils.getPostMessage(context, pushType);
+        if (msg != null && msg.length() > 0) {
+          PostTwitterTask task = new PostTwitterTask(context);
+          task.execute(msg);
         }
+      } catch (JSONException e) {
+
+      } catch (NumberFormatException e) {
+
+      }
     }
+  }
 }
