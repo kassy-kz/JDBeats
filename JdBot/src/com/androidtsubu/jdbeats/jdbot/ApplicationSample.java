@@ -16,7 +16,7 @@ public class ApplicationSample extends Application {
     Parse.initialize(this, "vKXdOzEY3Q79XkTgwk45GjZdXPxxzq8aqaBhcXIP",
         "mLNQM1KQocz82N2InlWvmoeZaiqI3kcChflLbbDO");
 
-    PushService.setDefaultPushCallback(this, Twitter.class);
+    PushService.setDefaultPushCallback(this, JdBotTweet.class);
     ParseInstallation.getCurrentInstallation().saveInBackground();
 
     // Twitterを利用
@@ -24,6 +24,6 @@ public class ApplicationSample extends Application {
         "yNsZx6d1L9q6N8pRCjWpv5N3blWSNTCWnGMwyLYCmw");
 
     // Push通知のsubscribe
-    PushService.subscribe(this, "AWP", Twitter.class);
+    PushService.subscribe(this, "AWP", JdBotTweet.class);
   }
 }

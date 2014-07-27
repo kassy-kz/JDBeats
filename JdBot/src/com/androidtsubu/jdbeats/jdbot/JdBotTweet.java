@@ -29,7 +29,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 
-public class Twitter extends Activity {
+public class JdBotTweet extends Activity {
 
     private Button btnAuth = null;
     private Button btnPost = null;
