@@ -149,15 +149,39 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
-        android:text="Your Mastle Power"
+        android:text="Your Muscle Power"
         android:textSize="32dp"/>
-    <TextView 
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content" 
-        android:id="@+id/txtScouterMax"
-        android:text="0.0"
-        android:textSize="100dp"/>
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+
+        <TextView
+            android:id="@+id/txtScouterMax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="21dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:text="0.0"
+            android:textSize="100dp" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/txtScouterMax"
+            android:layout_alignBottom="@+id/txtScouterMax"
+            android:layout_alignParentRight="true"
+            android:text="  AWP"
+            android:textSize="32dp" />
+        
+    </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_weight="1"
